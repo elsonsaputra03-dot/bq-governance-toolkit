@@ -23,9 +23,12 @@ _FILTER = re.compile(r"(?:where|and|or)\s+(?:[a-z_]\w*\s*\(\s*)?(?:[a-z_][\w]*\.
 _STAR = re.compile(r"select\s+(?:distinct\s+)?\*", re.I)
 
 
+_COMMENT = re.compile(r"--[^\n]*|/\*.*?\*/", re.S)
+
+
 def fingerprint(q: str | None) -> str:
-    """Normalisasi literal & spasi supaya query yang sama dengan nilai berbeda dihitung sebagai satu pola."""
-    return _WS.sub(" ", _LIT.sub("?", q or "")).strip().lower()[:500]
+    """Normalisasi komentar, literal, spasi, dan titik koma penutup supaya query yang sama dihitung sebagai satu pola."""
+    return _WS.sub(" ", _LIT.sub("?", _COMMENT.sub(" ", q or ""))).strip().rstrip(";").strip().lower()[:500]
 
 
 def job_cost(j: dict, price: float) -> float:
@@ -79,9 +82,8 @@ def storage_costs(snapshot: dict) -> list[dict]:
 
 
 def table_usage(snapshot: dict, cfg_finops: dict) -> dict[str, dict]:
-    """Per tabel: jumlah baca, byte, full scan (job satu-tabel yang membaca >= rasio ukuran tabel), kolom yang difilter."""
+    """Per tabel: jumlah baca, byte, pembaca, kolom yang difilter (jumlah & biaya query yang memakainya), SELECT *."""
     price = snapshot["meta"]["prices"]["on_demand_per_tib"]
-    size = {f"{snapshot['meta']['project']}.{s['dataset']}.{s['table']}": s.get("total_logical_bytes") or 0 for s in snapshot["storage"]}
     cols = defaultdict(dict)
     for c in snapshot["columns"]:
         cols[f"{snapshot['meta']['project']}.{c['dataset']}.{c['table']}"][c["column"].lower()] = c
@@ -93,19 +95,17 @@ def table_usage(snapshot: dict, cfg_finops: dict) -> dict[str, dict]:
         filt = {m.lower() for m in _FILTER.findall(j.get("query") or "")}
         star = bool(_STAR.search(j.get("query") or ""))
         for t in refs:
-            u = use.setdefault(t, {"reads": 0, "bytes_billed": 0, "cost_usd": 0.0, "full_scans": 0, "full_scan_cost_usd": 0.0,
-                                   "filters": Counter(), "select_star": 0, "select_star_cost_usd": 0.0, "users": set(), "last_read": ""})
+            u = use.setdefault(t, {"reads": 0, "bytes_billed": 0, "cost_usd": 0.0, "filters": Counter(), "filter_cost_usd": Counter(),
+                                   "select_star": 0, "select_star_cost_usd": 0.0, "users": set(), "last_read": ""})
             u["reads"] += 1; u["users"].add(j.get("user_email") or "unknown"); u["last_read"] = max(u["last_read"], j.get("creation_time") or "")
             share = job_cost(j, price) / len(refs)
             u["bytes_billed"] += j.get("bytes_billed", 0) // len(refs); u["cost_usd"] += share
             for f in filt & set(cols.get(t, {})):
-                u["filters"][f] += 1
+                u["filters"][f] += 1; u["filter_cost_usd"][f] += share
             if star:
                 u["select_star"] += 1; u["select_star_cost_usd"] += share
-            if len(refs) == 1 and size.get(t) and j.get("bytes_processed", 0) >= cfg_finops["full_scan_ratio"] * size[t]:
-                u["full_scans"] += 1; u["full_scan_cost_usd"] += share
     for u in use.values():
-        u["users"] = sorted(u["users"]); u["filters"] = dict(u["filters"].most_common())
+        u["users"] = sorted(u["users"]); u["filters"] = dict(u["filters"].most_common()); u["filter_cost_usd"] = dict(u["filter_cost_usd"])
     return use
 
 
@@ -122,14 +122,17 @@ def recommendations(snapshot: dict, cfg_finops: dict) -> list[dict]:
         u, tc, gib = use.get(t), cols.get(t, {}), st["logical_bytes"] / GIB
         partitioned = any((c.get("is_partitioning_column") or "NO") == "YES" for c in tc.values())
         clustered = any(c.get("clustering_ordinal_position") for c in tc.values())
-        if u and not partitioned and gib >= cfg_finops["partition_min_gib"] and u["full_scans"] >= 3:
-            dates = [f for f in u["filters"] if (tc.get(f, {}).get("data_type") or "") in DATE_TYPES]
+        # Tabel tanpa partisi tidak bisa memangkas baris: query dengan filter tanggal tetap membaca semua baris dari kolom yang dipakai.
+        # (Versi awal membandingkan byte job dengan ukuran seluruh tabel; itu keliru untuk storage kolumnar dan terbukti di data nyata.)
+        if u and not partitioned and gib >= cfg_finops["partition_min_gib"]:
+            dates = [f for f in u["filters"] if (tc.get(f, {}).get("data_type") or "") in DATE_TYPES and u["filters"][f] >= 3]
             if dates:
                 col, typ = dates[0], tc[dates[0]]["data_type"]
                 expr = col if typ == "DATE" else f"DATE({col})"
                 recs.append({"type": "partition", "table": t, "column": col,
-                             "detail": f"{u['full_scans']} full scans in {meta['lookback_days']} days, and `{col}` is filtered in {u['filters'][col]} queries.",
-                             "addressable_usd": round(u["full_scan_cost_usd"], 6),
+                             "detail": f"`{col}` is filtered in {u['filters'][col]} queries in {meta['lookback_days']} days, but the table is not "
+                                       f"partitioned, so each of them reads every row.",
+                             "addressable_usd": round(u["filter_cost_usd"][col], 6),
                              "ddl": f"CREATE TABLE `{t}_part` PARTITION BY {expr} AS SELECT * FROM `{t}`;  -- lalu ganti nama setelah validasi"})
         if u and not clustered and gib >= cfg_finops["cluster_min_gib"]:
             cand = [f for f, n in u["filters"].items() if n >= 3 and (tc.get(f, {}).get("data_type") or "").split("<")[0] in CLUSTER_TYPES

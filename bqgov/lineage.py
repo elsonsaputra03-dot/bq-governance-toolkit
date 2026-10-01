@@ -10,7 +10,8 @@ from __future__ import annotations
 import re
 
 WRITE_TYPES = {"CREATE_TABLE_AS_SELECT", "INSERT", "MERGE", "UPDATE", "DELETE", "QUERY"}
-_REF = re.compile(r"`?([a-zA-Z0-9_\-]+)\.([a-zA-Z0-9_]+)\.([a-zA-Z0-9_$]+)`?")
+# referensi tabel setelah FROM/JOIN: `project.dataset.table`, project.dataset.table, atau dataset.table (project = project view)
+_REF = re.compile(r"\b(?:from|join)\s+`?(?:([a-zA-Z0-9_\-]+)\.)?([a-zA-Z_][a-zA-Z0-9_]*)\.([a-zA-Z_$][a-zA-Z0-9_$]*)`?", re.I)
 
 
 def fq(t: dict | None) -> str | None:
@@ -45,7 +46,7 @@ def from_views(views: list[dict], project: str) -> list[dict]:
     for v in views:
         dst = f"{project}.{v['dataset']}.{v['table']}"
         for p, d, t in set(_REF.findall(v.get("view_definition") or "")):
-            src = f"{p}.{d}.{t}"
+            src = f"{p or project}.{d}.{t}"
             if src != dst:
                 out.append({"source": src, "target": dst, "via": "view", "jobs": 0, "cost_usd": 0.0, "last_seen": ""})
     return out

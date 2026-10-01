@@ -2,7 +2,7 @@ project: demo-project
 location: US
 datasets: [gov_raw, gov_staging, gov_mart]
 lookback_days: 30
-finops: {expensive_query_usd: 0.0001, full_scan_ratio: 0.9, partition_min_gib: 0.01, cluster_min_gib: 0.01, pipeline_label: pipeline, unused_days: 30}
+finops: {expensive_query_usd: 0.0001, partition_min_gib: 0.01, cluster_min_gib: 0.01, pipeline_label: pipeline, unused_days: 30}
 dq:
   - table: gov_mart.daily_sales
     freshness_hours: [26, 50]

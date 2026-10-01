@@ -13,7 +13,7 @@ DEFAULTS = {
     "lookback_days": 30,
     "guards": {"max_bytes_billed": 1 << 30, "dry_run_first": True},
     "prices": {"on_demand_per_tib": 6.25, "active_storage_per_gib_month": 0.02, "long_term_storage_per_gib_month": 0.01},
-    "finops": {"expensive_query_usd": 1.0, "full_scan_ratio": 0.9, "partition_min_gib": 10.0, "cluster_min_gib": 1.0,
+    "finops": {"expensive_query_usd": 1.0, "partition_min_gib": 10.0, "cluster_min_gib": 1.0,
                "pipeline_label": "pipeline", "unused_days": 30},
     "dq": [],
     "describe": {"provider": "none", "model": "", "ollama_url": "http://localhost:11434", "language": "en"},

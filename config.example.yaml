@@ -15,7 +15,6 @@ prices:                           # USD
 
 finops:
   expensive_query_usd: 0.05       # job di atas ini masuk daftar query mahal (demo kecil; produksi biasanya jauh lebih besar)
-  full_scan_ratio: 0.9            # job dianggap full scan bila byte billed >= 90% ukuran tabel yang dibaca
   partition_min_gib: 0.01         # tabel di atas ukuran ini dipertimbangkan untuk partitioning (demo); produksi mis. 10
   cluster_min_gib: 0.01
   pipeline_label: pipeline        # label job untuk mengelompokkan biaya per pipeline

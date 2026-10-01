@@ -77,10 +77,18 @@ def test_costs_exclude_failed_and_cache_hits(snap, cfg):
     assert c["top_patterns"][0]["runs"] >= 7                       # pola berulang dengan literal berbeda digabung
 
 
-def test_usage_full_scans_filters_and_star(snap, cfg):
+def test_usage_filters_cost_and_star(snap, cfg):
     u = finops.table_usage(snap, cfg.finops)[f"{P}.gov_raw.order_items"]
-    assert u["full_scans"] == 42 and u["select_star"] == 21
+    assert u["select_star"] == 21
     assert u["filters"]["created_at"] == 42 and u["filters"]["status"] == 21
+    assert u["filter_cost_usd"]["created_at"] > u["filter_cost_usd"]["status"] > 0
+
+
+def test_partition_rule_uses_filters_not_bytes_ratio(snap, cfg):
+    # query kolumnar membaca sebagian kecil byte tabel; rekomendasi tetap harus muncul (kasus nyata pertama)
+    narrow = {**snap, "jobs": [{**j, "bytes_processed": 1024} for j in snap["jobs"]]}
+    recs = {(r["type"], r["table"].split(".", 1)[1]) for r in finops.recommendations(narrow, cfg.finops)}
+    assert ("partition", "gov_raw.order_items") in recs
 
 
 def test_recommendations(snap, cfg):
@@ -189,3 +197,14 @@ def test_storage_gaps_filled_from_tables_api(cfg):
 def test_filter_inside_function_detected():
     assert finops._FILTER.findall("SELECT 1 FROM t WHERE DATE(created_at) = DATE '2024-01-01' AND status = 'x'") == ["created_at", "status"]
     assert finops._FILTER.findall("SELECT * FROM a JOIN b ON a.id = b.id WHERE b.x > 1") == ["x"]
+
+
+def test_view_lineage_with_dataset_only_reference(cfg):
+    views = [{"dataset": "gov_mart", "table": "v_top", "view_definition": "SELECT c FROM gov_mart.daily_sales d JOIN `p2.raw.x` x ON x.id = d.id"}]
+    e = {(x["source"], x["target"]) for x in lineage.from_views(views, P)}
+    assert e == {(f"{P}.gov_mart.daily_sales", f"{P}.gov_mart.v_top"), ("p2.raw.x", f"{P}.gov_mart.v_top")}
+
+
+def test_fingerprint_ignores_comments_and_semicolon():
+    a = finops.fingerprint("CREATE OR REPLACE TABLE t AS SELECT 1; -- at [31:1]")
+    assert a == finops.fingerprint("create or replace table t as select 1") == finops.fingerprint("/* x */ CREATE OR REPLACE TABLE t AS SELECT 1;")

@@ -48,13 +48,14 @@ A governance tool that runs up the bill defeats its purpose, so every path is bo
 
 | Type | Raised when | Reported evidence |
 |---|---|---|
-| `partition` | Table above `partition_min_gib`, not partitioned, ≥ 3 full scans in the window, and a DATE/TIMESTAMP column appears in filters | full scans, the filtered column, and the cost of those scans; proposed DDL |
+| `partition` | Table above `partition_min_gib`, not partitioned, and a DATE/TIMESTAMP column used as a filter in ≥ 3 queries | the column, how many queries filter on it, and their cost; proposed DDL |
 | `cluster` | Table above `cluster_min_gib`, not clustered, and up to 4 non-date columns filtered in ≥ 3 queries | columns with filter counts, the read cost |
 | `select_star` | ≥ 3 `SELECT *` queries on a table with ≥ 10 columns | query count and their cost |
 | `unused` | Base table in a catalogued dataset with no reads in the window | monthly storage cost; owner review before any `DROP` |
 
 "Addressable cost" is the cost the change could reduce, not a promised saving: the actual saving depends on how selective the
-filters are. A full scan is a single-table job that processed at least `full_scan_ratio` (default 90%) of the table's logical size.
+filters are. BigQuery storage is columnar, so a query on an unpartitioned table reads every row of the columns it uses even when it
+filters by date; comparing bytes processed with the whole table size (the first version) misses this, which the first real run showed.
 
 ## AI-suggested descriptions, with a review gate
 
