@@ -1,5 +1,6 @@
 [
  {
+  "dataset": "gov_raw",
   "table": "orders",
   "column": "order_id",
   "data_type": "INT64",
@@ -9,6 +10,7 @@
   "description": "One order"
  },
  {
+  "dataset": "gov_raw",
   "table": "orders",
   "column": "user_id",
   "data_type": "INT64",
@@ -18,6 +20,7 @@
   "description": null
  },
  {
+  "dataset": "gov_raw",
   "table": "orders",
   "column": "status",
   "data_type": "STRING",
@@ -27,6 +30,7 @@
   "description": null
  },
  {
+  "dataset": "gov_raw",
   "table": "orders",
   "column": "created_at",
   "data_type": "TIMESTAMP",
@@ -36,6 +40,7 @@
   "description": null
  },
  {
+  "dataset": "gov_raw",
   "table": "orders",
   "column": "shipped_at",
   "data_type": "TIMESTAMP",
@@ -45,6 +50,7 @@
   "description": null
  },
  {
+  "dataset": "gov_raw",
   "table": "orders",
   "column": "delivered_at",
   "data_type": "TIMESTAMP",
@@ -54,6 +60,7 @@
   "description": null
  },
  {
+  "dataset": "gov_raw",
   "table": "orders",
   "column": "returned_at",
   "data_type": "TIMESTAMP",
@@ -63,6 +70,7 @@
   "description": null
  },
  {
+  "dataset": "gov_raw",
   "table": "orders",
   "column": "num_of_item",
   "data_type": "INT64",
@@ -72,6 +80,7 @@
   "description": null
  },
  {
+  "dataset": "gov_raw",
   "table": "order_items",
   "column": "id",
   "data_type": "INT64",
@@ -81,6 +90,7 @@
   "description": null
  },
  {
+  "dataset": "gov_raw",
   "table": "order_items",
   "column": "order_id",
   "data_type": "INT64",
@@ -90,6 +100,7 @@
   "description": null
  },
  {
+  "dataset": "gov_raw",
   "table": "order_items",
   "column": "user_id",
   "data_type": "INT64",
@@ -99,6 +110,7 @@
   "description": null
  },
  {
+  "dataset": "gov_raw",
   "table": "order_items",
   "column": "product_id",
   "data_type": "INT64",
@@ -108,6 +120,7 @@
   "description": null
  },
  {
+  "dataset": "gov_raw",
   "table": "order_items",
   "column": "status",
   "data_type": "STRING",
@@ -117,6 +130,7 @@
   "description": null
  },
  {
+  "dataset": "gov_raw",
   "table": "order_items",
   "column": "created_at",
   "data_type": "TIMESTAMP",
@@ -126,6 +140,7 @@
   "description": null
  },
  {
+  "dataset": "gov_raw",
   "table": "order_items",
   "column": "shipped_at",
   "data_type": "TIMESTAMP",
@@ -135,6 +150,7 @@
   "description": null
  },
  {
+  "dataset": "gov_raw",
   "table": "order_items",
   "column": "delivered_at",
   "data_type": "TIMESTAMP",
@@ -144,6 +160,7 @@
   "description": null
  },
  {
+  "dataset": "gov_raw",
   "table": "order_items",
   "column": "returned_at",
   "data_type": "TIMESTAMP",
@@ -153,6 +170,7 @@
   "description": null
  },
  {
+  "dataset": "gov_raw",
   "table": "order_items",
   "column": "sale_price",
   "data_type": "FLOAT64",
@@ -162,6 +180,7 @@
   "description": null
  },
  {
+  "dataset": "gov_raw",
   "table": "products",
   "column": "id",
   "data_type": "INT64",
@@ -171,6 +190,7 @@
   "description": "Product id"
  },
  {
+  "dataset": "gov_raw",
   "table": "products",
   "column": "cost",
   "data_type": "FLOAT64",
@@ -180,6 +200,7 @@
   "description": "Unit cost"
  },
  {
+  "dataset": "gov_raw",
   "table": "products",
   "column": "category",
   "data_type": "STRING",
@@ -189,6 +210,7 @@
   "description": "Category"
  },
  {
+  "dataset": "gov_raw",
   "table": "products",
   "column": "name",
   "data_type": "STRING",
@@ -198,6 +220,7 @@
   "description": "Name"
  },
  {
+  "dataset": "gov_raw",
   "table": "products",
   "column": "brand",
   "data_type": "STRING",
@@ -207,6 +230,7 @@
   "description": "Brand"
  },
  {
+  "dataset": "gov_raw",
   "table": "products",
   "column": "retail_price",
   "data_type": "FLOAT64",
@@ -216,6 +240,7 @@
   "description": "List price"
  },
  {
+  "dataset": "gov_raw",
   "table": "products",
   "column": "department",
   "data_type": "STRING",
@@ -225,6 +250,7 @@
   "description": "Department"
  },
  {
+  "dataset": "gov_raw",
   "table": "products",
   "column": "distribution_center_id",
   "data_type": "INT64",
@@ -234,6 +260,7 @@
   "description": "Warehouse"
  },
  {
+  "dataset": "gov_raw",
   "table": "users",
   "column": "id",
   "data_type": "INT64",
@@ -243,6 +270,7 @@
   "description": null
  },
  {
+  "dataset": "gov_raw",
   "table": "users",
   "column": "age",
   "data_type": "INT64",
@@ -252,6 +280,7 @@
   "description": null
  },
  {
+  "dataset": "gov_raw",
   "table": "users",
   "column": "gender",
   "data_type": "STRING",
@@ -261,6 +290,7 @@
   "description": null
  },
  {
+  "dataset": "gov_raw",
   "table": "users",
   "column": "state",
   "data_type": "STRING",
@@ -270,6 +300,7 @@
   "description": null
  },
  {
+  "dataset": "gov_raw",
   "table": "users",
   "column": "city",
   "data_type": "STRING",
@@ -279,6 +310,7 @@
   "description": null
  },
  {
+  "dataset": "gov_raw",
   "table": "users",
   "column": "country",
   "data_type": "STRING",
@@ -288,6 +320,7 @@
   "description": null
  },
  {
+  "dataset": "gov_raw",
   "table": "users",
   "column": "traffic_source",
   "data_type": "STRING",
@@ -297,6 +330,7 @@
   "description": null
  },
  {
+  "dataset": "gov_raw",
   "table": "users",
   "column": "created_at",
   "data_type": "TIMESTAMP",
@@ -306,6 +340,7 @@
   "description": null
  },
  {
+  "dataset": "gov_raw",
   "table": "legacy_product_snapshot",
   "column": "id",
   "data_type": "INT64",
@@ -315,6 +350,7 @@
   "description": null
  },
  {
+  "dataset": "gov_raw",
   "table": "legacy_product_snapshot",
   "column": "cost",
   "data_type": "FLOAT64",
@@ -324,9 +360,230 @@
   "description": null
  },
  {
+  "dataset": "gov_raw",
   "table": "legacy_product_snapshot",
   "column": "category",
   "data_type": "STRING",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "dataset": "gov_staging",
+  "table": "stg_order_items",
+  "column": "order_item_id",
+  "data_type": "INT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "dataset": "gov_staging",
+  "table": "stg_order_items",
+  "column": "order_id",
+  "data_type": "INT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "dataset": "gov_staging",
+  "table": "stg_order_items",
+  "column": "user_id",
+  "data_type": "INT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "dataset": "gov_staging",
+  "table": "stg_order_items",
+  "column": "order_date",
+  "data_type": "DATE",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": "Order date"
+ },
+ {
+  "dataset": "gov_staging",
+  "table": "stg_order_items",
+  "column": "status",
+  "data_type": "STRING",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "dataset": "gov_staging",
+  "table": "stg_order_items",
+  "column": "category",
+  "data_type": "STRING",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "dataset": "gov_staging",
+  "table": "stg_order_items",
+  "column": "department",
+  "data_type": "STRING",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "dataset": "gov_staging",
+  "table": "stg_order_items",
+  "column": "brand",
+  "data_type": "STRING",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "dataset": "gov_staging",
+  "table": "stg_order_items",
+  "column": "sale_price",
+  "data_type": "FLOAT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "dataset": "gov_staging",
+  "table": "stg_order_items",
+  "column": "cost",
+  "data_type": "FLOAT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "dataset": "gov_mart",
+  "table": "daily_sales",
+  "column": "order_date",
+  "data_type": "DATE",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": "Calendar date of the order"
+ },
+ {
+  "dataset": "gov_mart",
+  "table": "daily_sales",
+  "column": "category",
+  "data_type": "STRING",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": "Product category"
+ },
+ {
+  "dataset": "gov_mart",
+  "table": "daily_sales",
+  "column": "orders",
+  "data_type": "INT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": "Distinct orders"
+ },
+ {
+  "dataset": "gov_mart",
+  "table": "daily_sales",
+  "column": "items",
+  "data_type": "INT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": "Order items"
+ },
+ {
+  "dataset": "gov_mart",
+  "table": "daily_sales",
+  "column": "revenue",
+  "data_type": "FLOAT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": "Revenue in USD"
+ },
+ {
+  "dataset": "gov_mart",
+  "table": "daily_sales",
+  "column": "margin",
+  "data_type": "FLOAT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": "Revenue minus cost in USD"
+ },
+ {
+  "dataset": "gov_mart",
+  "table": "customer_ltv",
+  "column": "user_id",
+  "data_type": "INT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "dataset": "gov_mart",
+  "table": "customer_ltv",
+  "column": "country",
+  "data_type": "STRING",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "dataset": "gov_mart",
+  "table": "customer_ltv",
+  "column": "traffic_source",
+  "data_type": "STRING",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "dataset": "gov_mart",
+  "table": "customer_ltv",
+  "column": "first_order",
+  "data_type": "DATE",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "dataset": "gov_mart",
+  "table": "customer_ltv",
+  "column": "orders",
+  "data_type": "INT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "dataset": "gov_mart",
+  "table": "customer_ltv",
+  "column": "revenue",
+  "data_type": "FLOAT64",
   "is_nullable": "YES",
   "is_partitioning_column": "NO",
   "clustering_ordinal_position": null,

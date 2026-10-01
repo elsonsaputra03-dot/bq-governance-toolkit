@@ -37,7 +37,7 @@ def main():
             [T("gov_staging", "stg_order_items"), T("gov_raw", "users")], T("gov_mart", "customer_ltv"), "CREATE_TABLE_AS_SELECT", 26, "etl-sa@demo.iam", "mart_customer_ltv", days=d)
         for _ in range(3):
             dd = f"2024-{rnd.randint(1, 12):02d}-{rnd.randint(1, 28):02d}"
-            job(f"SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '{dd}' GROUP BY status", [T("gov_raw", "order_items")], mb=24, days=d)
+            job(f"SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE DATE(created_at) = DATE '{dd}' GROUP BY status", [T("gov_raw", "order_items")], mb=24, days=d)
             job(f"SELECT * FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '{dd}' AND status = 'Complete' LIMIT 100",
                 [T("gov_raw", "order_items")], mb=24, user="bi@example.com", days=d)
         job("SELECT * FROM gov_mart.v_top_categories", [T("gov_mart", "daily_sales")], mb=1, user="bi@example.com", days=d)
@@ -56,18 +56,22 @@ def main():
             ("gov_mart", "daily_sales"): "order_date:DATE:Calendar date of the order, category:STRING:Product category, orders:INT64:Distinct orders, items:INT64:Order items, revenue:FLOAT64:Revenue in USD, margin:FLOAT64:Revenue minus cost in USD",
             ("gov_mart", "customer_ltv"): "user_id:INT64, country:STRING, traffic_source:STRING, first_order:DATE, orders:INT64, revenue:FLOAT64"}
     tdesc = {"orders": '"One row per order"', "users": '"Customers without direct identifiers"', "daily_sales": '"Daily revenue and margin by product category"'}
-    for ds in ("gov_raw", "gov_staging", "gov_mart"):
-        rows = []
-        for (d, t), spec in cols.items():
-            if d != ds: continue
-            for c in spec.split(", "):
-                name, typ, *desc = c.split(":")
-                rows.append({"table": t, "column": name, "data_type": typ, "is_nullable": "YES", "is_partitioning_column": "NO",
+    col_rows, table_rows = [], []
+    for (d, t), spec in cols.items():
+        for c in spec.split(", "):
+            name, typ, *desc = c.split(":")
+            col_rows.append({"dataset": d, "table": t, "column": name, "data_type": typ, "is_nullable": "YES", "is_partitioning_column": "NO",
                              "clustering_ordinal_position": None, "description": desc[0] if desc else None})
-        w(f"columns__{ds}", rows)
-        w(f"tables__{ds}", [{"table": t, "table_type": "BASE TABLE", "creation_time": (NOW - timedelta(days=40)).isoformat(), "description_raw": tdesc.get(t)}
-                            for (d, t) in cols if d == ds] + ([{"table": "v_top_categories", "table_type": "VIEW", "creation_time": NOW.isoformat(), "description_raw": None}] if ds == "gov_mart" else []))
-        w(f"views__{ds}", [{"table": "v_top_categories", "view_definition": f"SELECT category, SUM(revenue) AS revenue FROM `{P}.gov_mart.daily_sales` GROUP BY category"}] if ds == "gov_mart" else [])
+        table_rows.append({"dataset": d, "table": t, "table_type": "BASE TABLE", "creation_time": (NOW - timedelta(days=40)).isoformat(),
+                           "description_raw": tdesc.get(t)})
+    table_rows.append({"dataset": "gov_mart", "table": "v_top_categories", "table_type": "VIEW", "creation_time": NOW.isoformat(), "description_raw": None})
+    w("columns", col_rows); w("tables", table_rows)
+    w("views", [{"dataset": "gov_mart", "table": "v_top_categories",
+                 "view_definition": f"SELECT category, SUM(revenue) AS revenue FROM `{P}.gov_mart.daily_sales` GROUP BY category"}])
+    st = json.loads((F / "storage.json").read_text(encoding="utf-8"))
+    for ds in ("gov_raw", "gov_staging", "gov_mart"):
+        w(f"api_tables__{ds}", [{**r, "active_logical_bytes": r["total_logical_bytes"], "long_term_logical_bytes": 0, "total_physical_bytes": None}
+                                for r in st if r["dataset"] == ds])
     w("table_meta", {"gov_mart.daily_sales": {"num_rows": 19000, "num_bytes": MB, "modified": (NOW - timedelta(hours=5)).isoformat(), "created": NOW.isoformat(),
                                               "description": "x", "partitioning": None, "clustering": [], "expires": None, "schema": []},
                      "gov_mart.customer_ltv": {"num_rows": 80000, "num_bytes": 4 * MB, "modified": (NOW - timedelta(hours=60)).isoformat(), "created": NOW.isoformat(),

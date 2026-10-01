@@ -23,25 +23,30 @@ WHERE creation_time >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL @days DAY)
   AND job_type = 'QUERY' AND IFNULL(statement_type, '') != 'SCRIPT' AND state = 'DONE'
 """
 
-# Skema per dataset: kolom, tipe, deskripsi, posisi partisi & cluster.
+# Metadata level region: satu query per jenis untuk semua dataset yang dikatalogkan. Setiap view INFORMATION_SCHEMA
+# ditagih minimum 10 MB per query, jadi query per dataset melipatgandakan biaya toolkit (ditemukan pada eksekusi nyata pertama).
 COLUMNS = """
-SELECT c.table_name AS table, c.column_name AS column, c.data_type, c.is_nullable,
+SELECT c.table_schema AS dataset, c.table_name AS table, c.column_name AS column, c.data_type, c.is_nullable,
        c.is_partitioning_column, c.clustering_ordinal_position, p.description
-FROM `{project}`.`{dataset}`.INFORMATION_SCHEMA.COLUMNS c
-LEFT JOIN `{project}`.`{dataset}`.INFORMATION_SCHEMA.COLUMN_FIELD_PATHS p
-  ON p.table_name = c.table_name AND p.column_name = c.column_name AND p.field_path = c.column_name
-ORDER BY c.table_name, c.ordinal_position
+FROM `{project}`.`{region}`.INFORMATION_SCHEMA.COLUMNS c
+LEFT JOIN `{project}`.`{region}`.INFORMATION_SCHEMA.COLUMN_FIELD_PATHS p
+  ON p.table_schema = c.table_schema AND p.table_name = c.table_name AND p.column_name = c.column_name AND p.field_path = c.column_name
+WHERE c.table_schema IN UNNEST(@datasets)
+ORDER BY dataset, c.table_name, c.ordinal_position
 """
 
 TABLES = """
-SELECT t.table_name AS table, t.table_type, t.creation_time,
-       (SELECT o.option_value FROM `{project}`.`{dataset}`.INFORMATION_SCHEMA.TABLE_OPTIONS o
-         WHERE o.table_name = t.table_name AND o.option_name = 'description') AS description_raw
-FROM `{project}`.`{dataset}`.INFORMATION_SCHEMA.TABLES t
+SELECT t.table_schema AS dataset, t.table_name AS table, t.table_type, t.creation_time, o.option_value AS description_raw
+FROM `{project}`.`{region}`.INFORMATION_SCHEMA.TABLES t
+LEFT JOIN `{project}`.`{region}`.INFORMATION_SCHEMA.TABLE_OPTIONS o
+  ON o.table_schema = t.table_schema AND o.table_name = t.table_name AND o.option_name = 'description'
+WHERE t.table_schema IN UNNEST(@datasets)
 """
 
 VIEWS = """
-SELECT table_name AS table, view_definition FROM `{project}`.`{dataset}`.INFORMATION_SCHEMA.VIEWS
+SELECT table_schema AS dataset, table_name AS table, view_definition
+FROM `{project}`.`{region}`.INFORMATION_SCHEMA.VIEWS
+WHERE table_schema IN UNNEST(@datasets)
 """
 
 # Cek DQ yang butuh scan data: null per kolom dan duplikat key. Dibatasi maximum_bytes_billed + dry run.

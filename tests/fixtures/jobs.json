@@ -116,7 +116,7 @@
   "bytes_billed": 25165824,
   "bytes_processed": 25165824,
   "slot_ms": 1000,
-  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-06-05' GROUP BY status",
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE DATE(created_at) = DATE '2024-06-05' GROUP BY status",
   "referenced_tables": [
    {
     "project_id": "demo-project",
@@ -172,7 +172,7 @@
   "bytes_billed": 25165824,
   "bytes_processed": 25165824,
   "slot_ms": 1000,
-  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-07-21' GROUP BY status",
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE DATE(created_at) = DATE '2024-07-21' GROUP BY status",
   "referenced_tables": [
    {
     "project_id": "demo-project",
@@ -228,7 +228,7 @@
   "bytes_billed": 25165824,
   "bytes_processed": 25165824,
   "slot_ms": 1000,
-  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-01-03' GROUP BY status",
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE DATE(created_at) = DATE '2024-01-03' GROUP BY status",
   "referenced_tables": [
    {
     "project_id": "demo-project",
@@ -446,7 +446,7 @@
   "bytes_billed": 25165824,
   "bytes_processed": 25165824,
   "slot_ms": 1000,
-  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-09-04' GROUP BY status",
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE DATE(created_at) = DATE '2024-09-04' GROUP BY status",
   "referenced_tables": [
    {
     "project_id": "demo-project",
@@ -502,7 +502,7 @@
   "bytes_billed": 25165824,
   "bytes_processed": 25165824,
   "slot_ms": 1000,
-  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-06-19' GROUP BY status",
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE DATE(created_at) = DATE '2024-06-19' GROUP BY status",
   "referenced_tables": [
    {
     "project_id": "demo-project",
@@ -558,7 +558,7 @@
   "bytes_billed": 25165824,
   "bytes_processed": 25165824,
   "slot_ms": 1000,
-  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-01-17' GROUP BY status",
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE DATE(created_at) = DATE '2024-01-17' GROUP BY status",
   "referenced_tables": [
    {
     "project_id": "demo-project",
@@ -776,7 +776,7 @@
   "bytes_billed": 25165824,
   "bytes_processed": 25165824,
   "slot_ms": 1000,
-  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-04-02' GROUP BY status",
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE DATE(created_at) = DATE '2024-04-02' GROUP BY status",
   "referenced_tables": [
    {
     "project_id": "demo-project",
@@ -832,7 +832,7 @@
   "bytes_billed": 25165824,
   "bytes_processed": 25165824,
   "slot_ms": 1000,
-  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-02-14' GROUP BY status",
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE DATE(created_at) = DATE '2024-02-14' GROUP BY status",
   "referenced_tables": [
    {
     "project_id": "demo-project",
@@ -888,7 +888,7 @@
   "bytes_billed": 25165824,
   "bytes_processed": 25165824,
   "slot_ms": 1000,
-  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-07-03' GROUP BY status",
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE DATE(created_at) = DATE '2024-07-03' GROUP BY status",
   "referenced_tables": [
    {
     "project_id": "demo-project",
@@ -1106,7 +1106,7 @@
   "bytes_billed": 25165824,
   "bytes_processed": 25165824,
   "slot_ms": 1000,
-  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-04-03' GROUP BY status",
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE DATE(created_at) = DATE '2024-04-03' GROUP BY status",
   "referenced_tables": [
    {
     "project_id": "demo-project",
@@ -1162,7 +1162,7 @@
   "bytes_billed": 25165824,
   "bytes_processed": 25165824,
   "slot_ms": 1000,
-  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-09-14' GROUP BY status",
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE DATE(created_at) = DATE '2024-09-14' GROUP BY status",
   "referenced_tables": [
    {
     "project_id": "demo-project",
@@ -1218,7 +1218,7 @@
   "bytes_billed": 25165824,
   "bytes_processed": 25165824,
   "slot_ms": 1000,
-  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-01-27' GROUP BY status",
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE DATE(created_at) = DATE '2024-01-27' GROUP BY status",
   "referenced_tables": [
    {
     "project_id": "demo-project",
@@ -1436,7 +1436,7 @@
   "bytes_billed": 25165824,
   "bytes_processed": 25165824,
   "slot_ms": 1000,
-  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-10-04' GROUP BY status",
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE DATE(created_at) = DATE '2024-10-04' GROUP BY status",
   "referenced_tables": [
    {
     "project_id": "demo-project",
@@ -1492,7 +1492,7 @@
   "bytes_billed": 25165824,
   "bytes_processed": 25165824,
   "slot_ms": 1000,
-  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-04-21' GROUP BY status",
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE DATE(created_at) = DATE '2024-04-21' GROUP BY status",
   "referenced_tables": [
    {
     "project_id": "demo-project",
@@ -1548,7 +1548,7 @@
   "bytes_billed": 25165824,
   "bytes_processed": 25165824,
   "slot_ms": 1000,
-  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-11-19' GROUP BY status",
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE DATE(created_at) = DATE '2024-11-19' GROUP BY status",
   "referenced_tables": [
    {
     "project_id": "demo-project",
@@ -1766,7 +1766,7 @@
   "bytes_billed": 25165824,
   "bytes_processed": 25165824,
   "slot_ms": 1000,
-  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-01-19' GROUP BY status",
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE DATE(created_at) = DATE '2024-01-19' GROUP BY status",
   "referenced_tables": [
    {
     "project_id": "demo-project",
@@ -1822,7 +1822,7 @@
   "bytes_billed": 25165824,
   "bytes_processed": 25165824,
   "slot_ms": 1000,
-  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-10-13' GROUP BY status",
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE DATE(created_at) = DATE '2024-10-13' GROUP BY status",
   "referenced_tables": [
    {
     "project_id": "demo-project",
@@ -1878,7 +1878,7 @@
   "bytes_billed": 25165824,
   "bytes_processed": 25165824,
   "slot_ms": 1000,
-  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-01-08' GROUP BY status",
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE DATE(created_at) = DATE '2024-01-08' GROUP BY status",
   "referenced_tables": [
    {
     "project_id": "demo-project",
@@ -2096,7 +2096,7 @@
   "bytes_billed": 25165824,
   "bytes_processed": 25165824,
   "slot_ms": 1000,
-  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-01-18' GROUP BY status",
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE DATE(created_at) = DATE '2024-01-18' GROUP BY status",
   "referenced_tables": [
    {
     "project_id": "demo-project",
@@ -2152,7 +2152,7 @@
   "bytes_billed": 25165824,
   "bytes_processed": 25165824,
   "slot_ms": 1000,
-  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-03-10' GROUP BY status",
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE DATE(created_at) = DATE '2024-03-10' GROUP BY status",
   "referenced_tables": [
    {
     "project_id": "demo-project",
@@ -2208,7 +2208,7 @@
   "bytes_billed": 25165824,
   "bytes_processed": 25165824,
   "slot_ms": 1000,
-  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-07-05' GROUP BY status",
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE DATE(created_at) = DATE '2024-07-05' GROUP BY status",
   "referenced_tables": [
    {
     "project_id": "demo-project",

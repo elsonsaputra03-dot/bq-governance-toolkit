@@ -167,3 +167,25 @@ def test_storage_falls_back_when_not_enabled(cfg):
     w = snap["meta"]["warnings"][0]
     assert snap["meta"]["storage_source"] == "tables_api" and "enable_info_schema_storage" in w and "ALTER PROJECT `demo-project`" in w
     assert len(snap["storage"]) == 8
+
+
+def test_metadata_is_one_query_per_kind_not_per_dataset(cfg):
+    r = FixtureRunner(HERE / "fixtures"); collect.collect(cfg, r)
+    assert r.calls == ["storage", "jobs", "tables", "columns", "views"]           # 5 query, berapa pun jumlah datasetnya
+
+
+def test_storage_gaps_filled_from_tables_api(cfg):
+    class Partial(FixtureRunner):                                                  # TABLE_STORAGE baru terisi sebagian
+        def query(self, name, sql, params=None):
+            rows = super().query(name, sql, params)
+            return [x for x in rows if x["table"] not in ("order_items", "users")] if name == "storage" else rows
+    snap = collect.collect(cfg, Partial(HERE / "fixtures"))
+    assert snap["meta"]["storage_source"] == "information_schema+tables_api"
+    assert "gov_raw.order_items" in snap["meta"]["warnings"][0] and len(snap["storage"]) == 8
+    recs = {(x["type"], x["table"].split(".", 1)[1]) for x in finops.recommendations(snap, cfg.finops)}
+    assert ("partition", "gov_raw.order_items") in recs                           # tidak hilang walau storage belum lengkap
+
+
+def test_filter_inside_function_detected():
+    assert finops._FILTER.findall("SELECT 1 FROM t WHERE DATE(created_at) = DATE '2024-01-01' AND status = 'x'") == ["created_at", "status"]
+    assert finops._FILTER.findall("SELECT * FROM a JOIN b ON a.id = b.id WHERE b.x > 1") == ["x"]

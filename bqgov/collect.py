@@ -54,16 +54,24 @@ def collect(cfg: Config, runner: Runner) -> dict:
     all_jobs = runner.query("jobs", sql.JOBS.format(**fmt), {"days": int(cfg.lookback_days)})
     own = [j for j in all_jobs if {"key": "tool", "value": "bqgov"} in (j.get("labels") or [])]   # query toolkit sendiri
     jobs = [j for j in all_jobs if j not in own]
-    tables, columns, views = [], [], []
-    for ds in cfg.datasets:
-        f = {**fmt, "dataset": ds}
-        for t in runner.query(f"tables__{ds}", sql.TABLES.format(**f)):
-            tables.append({"dataset": ds, "table": t["table"], "type": t["table_type"], "created": t.get("creation_time"),
-                           "description": _desc(t.get("description_raw"))})
-        for c in runner.query(f"columns__{ds}", sql.COLUMNS.format(**f)):
-            columns.append({"dataset": ds, **c, "description": c.get("description") or ""})
-        for v in runner.query(f"views__{ds}", sql.VIEWS.format(**f)):
-            views.append({"dataset": ds, **v})
+    dp = {"datasets": list(cfg.datasets)}
+    tables = [{"dataset": t["dataset"], "table": t["table"], "type": t["table_type"], "created": t.get("creation_time"),
+               "description": _desc(t.get("description_raw"))} for t in runner.query("tables", sql.TABLES.format(**fmt), dp)]
+    columns = [{**c, "description": c.get("description") or ""} for c in runner.query("columns", sql.COLUMNS.format(**fmt), dp)]
+    views = runner.query("views", sql.VIEWS.format(**fmt), dp)
+
+    # TABLE_STORAGE bisa belum lengkap (mis. baru diaktifkan): tabel yang hilang tidak akan dianalisis sama sekali,
+    # jadi celahnya diisi dari Tables API (gratis), hanya untuk dataset yang dikatalogkan.
+    if storage_source == "information_schema":
+        have = {(r["dataset"], r["table"]) for r in storage}
+        missing = [t for t in tables if t["type"] == "BASE TABLE" and (t["dataset"], t["table"]) not in have]
+        if missing:
+            need = {(t["dataset"], t["table"]) for t in missing}
+            for ds in sorted({d for d, _ in need}):
+                storage += [r for r in runner.dataset_tables(ds) if (r["dataset"], r["table"]) in need]
+            storage_source = "information_schema+tables_api"
+            warnings.append(f"{len(missing)} table(s) missing from TABLE_STORAGE (collection may be recent); "
+                            f"filled from the Tables API without long-term split: " + ", ".join(f"{d}.{t}" for d, t in sorted(need)) + ".")
     return {"meta": {"warnings": warnings, "storage_source": storage_source, "project": cfg.project, "location": cfg.location, "collected_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
                      "lookback_days": cfg.lookback_days, "datasets": cfg.datasets, "prices": cfg.prices,
                      "toolkit_jobs_in_window": len(own), "toolkit_bytes_in_window": sum(j.get("bytes_billed", 0) for j in own)},

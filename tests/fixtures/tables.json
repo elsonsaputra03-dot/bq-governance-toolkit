@@ -1,0 +1,65 @@
+[
+ {
+  "dataset": "gov_raw",
+  "table": "orders",
+  "table_type": "BASE TABLE",
+  "creation_time": "2026-08-21T06:00:00+00:00",
+  "description_raw": "\"One row per order\""
+ },
+ {
+  "dataset": "gov_raw",
+  "table": "order_items",
+  "table_type": "BASE TABLE",
+  "creation_time": "2026-08-21T06:00:00+00:00",
+  "description_raw": null
+ },
+ {
+  "dataset": "gov_raw",
+  "table": "products",
+  "table_type": "BASE TABLE",
+  "creation_time": "2026-08-21T06:00:00+00:00",
+  "description_raw": null
+ },
+ {
+  "dataset": "gov_raw",
+  "table": "users",
+  "table_type": "BASE TABLE",
+  "creation_time": "2026-08-21T06:00:00+00:00",
+  "description_raw": "\"Customers without direct identifiers\""
+ },
+ {
+  "dataset": "gov_raw",
+  "table": "legacy_product_snapshot",
+  "table_type": "BASE TABLE",
+  "creation_time": "2026-08-21T06:00:00+00:00",
+  "description_raw": null
+ },
+ {
+  "dataset": "gov_staging",
+  "table": "stg_order_items",
+  "table_type": "BASE TABLE",
+  "creation_time": "2026-08-21T06:00:00+00:00",
+  "description_raw": null
+ },
+ {
+  "dataset": "gov_mart",
+  "table": "daily_sales",
+  "table_type": "BASE TABLE",
+  "creation_time": "2026-08-21T06:00:00+00:00",
+  "description_raw": "\"Daily revenue and margin by product category\""
+ },
+ {
+  "dataset": "gov_mart",
+  "table": "customer_ltv",
+  "table_type": "BASE TABLE",
+  "creation_time": "2026-08-21T06:00:00+00:00",
+  "description_raw": null
+ },
+ {
+  "dataset": "gov_mart",
+  "table": "v_top_categories",
+  "table_type": "VIEW",
+  "creation_time": "2026-09-30T06:00:00+00:00",
+  "description_raw": null
+ }
+]

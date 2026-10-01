@@ -43,6 +43,8 @@ class BigQueryRunner:
     def _cfg(self, params: dict | None, dry: bool = False):
         qp = []
         for k, v in (params or {}).items():
+            if isinstance(v, (list, tuple)):
+                qp.append(self.bq.ArrayQueryParameter(k, "STRING", list(v))); continue
             t = "INT64" if isinstance(v, int) else "FLOAT64" if isinstance(v, float) else "STRING"
             qp.append(self.bq.ScalarQueryParameter(k, t, v))
         return self.bq.QueryJobConfig(query_parameters=qp, maximum_bytes_billed=self.max_bytes, dry_run=dry,

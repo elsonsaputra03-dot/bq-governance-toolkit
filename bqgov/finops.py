@@ -17,7 +17,9 @@ CLUSTER_TYPES = {"STRING", "INT64", "BOOL", "DATE", "NUMERIC", "BIGNUMERIC", "TI
 _LIT = re.compile(r"'(?:[^'\\]|\\.)*'|\"(?:[^\"\\]|\\.)*\"|\b\d+(?:\.\d+)?\b")
 _WS = re.compile(r"\s+")
 # hanya predikat WHERE/AND/OR; kondisi JOIN ... ON adalah kunci join (sering milik tabel lain), bukan filter
-_FILTER = re.compile(r"(?:where|and|or)\s+(?:[a-z_][\w]*\.)?`?([a-z_][\w]*)`?\s*(?:=|!=|<>|>=|<=|>|<|\bbetween\b|\bin\b|\blike\b|\bis\b)", re.I)
+# kolom boleh dibungkus satu fungsi, mis. WHERE DATE(created_at) = ... (ditemukan pada eksekusi nyata pertama)
+_FILTER = re.compile(r"(?:where|and|or)\s+(?:[a-z_]\w*\s*\(\s*)?(?:[a-z_][\w]*\.)?`?([a-z_][\w]*)`?\s*\)?\s*"
+                     r"(?:=|!=|<>|>=|<=|>|<|\bbetween\b|\bin\b|\blike\b|\bis\b)", re.I)
 _STAR = re.compile(r"select\s+(?:distinct\s+)?\*", re.I)
 
 
