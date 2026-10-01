@@ -1,0 +1,2398 @@
+[
+ {
+  "job_id": "job_1",
+  "creation_time": "2026-09-29T05:59:00+00:00",
+  "user_email": "etl-sa@demo.iam",
+  "job_type": "QUERY",
+  "statement_type": "CREATE_TABLE_AS_SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 28311552,
+  "bytes_processed": 28311552,
+  "slot_ms": 1000,
+  "query": "CREATE OR REPLACE TABLE gov_staging.stg_order_items AS SELECT oi.id, p.category FROM gov_raw.order_items oi JOIN gov_raw.products p ON p.id = oi.product_id",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   },
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "products"
+   }
+  ],
+  "destination_table": {
+   "project_id": "demo-project",
+   "dataset_id": "gov_staging",
+   "table_id": "stg_order_items"
+  },
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "stg_order_items"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_2",
+  "creation_time": "2026-09-29T05:58:00+00:00",
+  "user_email": "etl-sa@demo.iam",
+  "job_type": "QUERY",
+  "statement_type": "CREATE_TABLE_AS_SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 18874368,
+  "bytes_processed": 18874368,
+  "slot_ms": 1000,
+  "query": "CREATE OR REPLACE TABLE gov_mart.daily_sales AS SELECT order_date, category FROM gov_staging.stg_order_items GROUP BY order_date, category",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_staging",
+    "table_id": "stg_order_items"
+   }
+  ],
+  "destination_table": {
+   "project_id": "demo-project",
+   "dataset_id": "gov_mart",
+   "table_id": "daily_sales"
+  },
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "mart_daily_sales"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_3",
+  "creation_time": "2026-09-29T05:57:00+00:00",
+  "user_email": "etl-sa@demo.iam",
+  "job_type": "QUERY",
+  "statement_type": "CREATE_TABLE_AS_SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 27262976,
+  "bytes_processed": 27262976,
+  "slot_ms": 1000,
+  "query": "CREATE OR REPLACE TABLE gov_mart.customer_ltv AS SELECT s.user_id FROM gov_staging.stg_order_items s JOIN gov_raw.users u ON u.id = s.user_id",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_staging",
+    "table_id": "stg_order_items"
+   },
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "users"
+   }
+  ],
+  "destination_table": {
+   "project_id": "demo-project",
+   "dataset_id": "gov_mart",
+   "table_id": "customer_ltv"
+  },
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "mart_customer_ltv"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_4",
+  "creation_time": "2026-09-29T05:56:00+00:00",
+  "user_email": "analyst@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-06-05' GROUP BY status",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_5",
+  "creation_time": "2026-09-29T05:55:00+00:00",
+  "user_email": "bi@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT * FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-06-05' AND status = 'Complete' LIMIT 100",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_6",
+  "creation_time": "2026-09-29T05:54:00+00:00",
+  "user_email": "analyst@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-07-21' GROUP BY status",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_7",
+  "creation_time": "2026-09-29T05:53:00+00:00",
+  "user_email": "bi@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT * FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-07-21' AND status = 'Complete' LIMIT 100",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_8",
+  "creation_time": "2026-09-29T05:52:00+00:00",
+  "user_email": "analyst@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-01-03' GROUP BY status",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_9",
+  "creation_time": "2026-09-29T05:51:00+00:00",
+  "user_email": "bi@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT * FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-01-03' AND status = 'Complete' LIMIT 100",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_10",
+  "creation_time": "2026-09-29T05:50:00+00:00",
+  "user_email": "bi@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 1048576,
+  "bytes_processed": 1048576,
+  "slot_ms": 1000,
+  "query": "SELECT * FROM gov_mart.v_top_categories",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_mart",
+    "table_id": "daily_sales"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_11",
+  "creation_time": "2026-09-29T05:49:00+00:00",
+  "user_email": "analyst@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 4194304,
+  "bytes_processed": 4194304,
+  "slot_ms": 1000,
+  "query": "SELECT country, AVG(revenue) FROM gov_mart.customer_ltv GROUP BY country",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_mart",
+    "table_id": "customer_ltv"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_12",
+  "creation_time": "2026-09-28T05:48:00+00:00",
+  "user_email": "etl-sa@demo.iam",
+  "job_type": "QUERY",
+  "statement_type": "CREATE_TABLE_AS_SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 28311552,
+  "bytes_processed": 28311552,
+  "slot_ms": 1000,
+  "query": "CREATE OR REPLACE TABLE gov_staging.stg_order_items AS SELECT oi.id, p.category FROM gov_raw.order_items oi JOIN gov_raw.products p ON p.id = oi.product_id",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   },
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "products"
+   }
+  ],
+  "destination_table": {
+   "project_id": "demo-project",
+   "dataset_id": "gov_staging",
+   "table_id": "stg_order_items"
+  },
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "stg_order_items"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_13",
+  "creation_time": "2026-09-28T05:47:00+00:00",
+  "user_email": "etl-sa@demo.iam",
+  "job_type": "QUERY",
+  "statement_type": "CREATE_TABLE_AS_SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 18874368,
+  "bytes_processed": 18874368,
+  "slot_ms": 1000,
+  "query": "CREATE OR REPLACE TABLE gov_mart.daily_sales AS SELECT order_date, category FROM gov_staging.stg_order_items GROUP BY order_date, category",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_staging",
+    "table_id": "stg_order_items"
+   }
+  ],
+  "destination_table": {
+   "project_id": "demo-project",
+   "dataset_id": "gov_mart",
+   "table_id": "daily_sales"
+  },
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "mart_daily_sales"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_14",
+  "creation_time": "2026-09-28T05:46:00+00:00",
+  "user_email": "etl-sa@demo.iam",
+  "job_type": "QUERY",
+  "statement_type": "CREATE_TABLE_AS_SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 27262976,
+  "bytes_processed": 27262976,
+  "slot_ms": 1000,
+  "query": "CREATE OR REPLACE TABLE gov_mart.customer_ltv AS SELECT s.user_id FROM gov_staging.stg_order_items s JOIN gov_raw.users u ON u.id = s.user_id",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_staging",
+    "table_id": "stg_order_items"
+   },
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "users"
+   }
+  ],
+  "destination_table": {
+   "project_id": "demo-project",
+   "dataset_id": "gov_mart",
+   "table_id": "customer_ltv"
+  },
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "mart_customer_ltv"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_15",
+  "creation_time": "2026-09-28T05:45:00+00:00",
+  "user_email": "analyst@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-09-04' GROUP BY status",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_16",
+  "creation_time": "2026-09-28T05:44:00+00:00",
+  "user_email": "bi@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT * FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-09-04' AND status = 'Complete' LIMIT 100",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_17",
+  "creation_time": "2026-09-28T05:43:00+00:00",
+  "user_email": "analyst@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-06-19' GROUP BY status",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_18",
+  "creation_time": "2026-09-28T05:42:00+00:00",
+  "user_email": "bi@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT * FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-06-19' AND status = 'Complete' LIMIT 100",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_19",
+  "creation_time": "2026-09-28T05:41:00+00:00",
+  "user_email": "analyst@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-01-17' GROUP BY status",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_20",
+  "creation_time": "2026-09-28T05:40:00+00:00",
+  "user_email": "bi@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT * FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-01-17' AND status = 'Complete' LIMIT 100",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_21",
+  "creation_time": "2026-09-28T05:39:00+00:00",
+  "user_email": "bi@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 1048576,
+  "bytes_processed": 1048576,
+  "slot_ms": 1000,
+  "query": "SELECT * FROM gov_mart.v_top_categories",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_mart",
+    "table_id": "daily_sales"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_22",
+  "creation_time": "2026-09-28T05:38:00+00:00",
+  "user_email": "analyst@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": true,
+  "bytes_billed": 0,
+  "bytes_processed": 4194304,
+  "slot_ms": 1000,
+  "query": "SELECT country, AVG(revenue) FROM gov_mart.customer_ltv GROUP BY country",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_mart",
+    "table_id": "customer_ltv"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_23",
+  "creation_time": "2026-09-27T05:37:00+00:00",
+  "user_email": "etl-sa@demo.iam",
+  "job_type": "QUERY",
+  "statement_type": "CREATE_TABLE_AS_SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 28311552,
+  "bytes_processed": 28311552,
+  "slot_ms": 1000,
+  "query": "CREATE OR REPLACE TABLE gov_staging.stg_order_items AS SELECT oi.id, p.category FROM gov_raw.order_items oi JOIN gov_raw.products p ON p.id = oi.product_id",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   },
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "products"
+   }
+  ],
+  "destination_table": {
+   "project_id": "demo-project",
+   "dataset_id": "gov_staging",
+   "table_id": "stg_order_items"
+  },
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "stg_order_items"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_24",
+  "creation_time": "2026-09-27T05:36:00+00:00",
+  "user_email": "etl-sa@demo.iam",
+  "job_type": "QUERY",
+  "statement_type": "CREATE_TABLE_AS_SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 18874368,
+  "bytes_processed": 18874368,
+  "slot_ms": 1000,
+  "query": "CREATE OR REPLACE TABLE gov_mart.daily_sales AS SELECT order_date, category FROM gov_staging.stg_order_items GROUP BY order_date, category",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_staging",
+    "table_id": "stg_order_items"
+   }
+  ],
+  "destination_table": {
+   "project_id": "demo-project",
+   "dataset_id": "gov_mart",
+   "table_id": "daily_sales"
+  },
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "mart_daily_sales"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_25",
+  "creation_time": "2026-09-27T05:35:00+00:00",
+  "user_email": "etl-sa@demo.iam",
+  "job_type": "QUERY",
+  "statement_type": "CREATE_TABLE_AS_SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 27262976,
+  "bytes_processed": 27262976,
+  "slot_ms": 1000,
+  "query": "CREATE OR REPLACE TABLE gov_mart.customer_ltv AS SELECT s.user_id FROM gov_staging.stg_order_items s JOIN gov_raw.users u ON u.id = s.user_id",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_staging",
+    "table_id": "stg_order_items"
+   },
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "users"
+   }
+  ],
+  "destination_table": {
+   "project_id": "demo-project",
+   "dataset_id": "gov_mart",
+   "table_id": "customer_ltv"
+  },
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "mart_customer_ltv"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_26",
+  "creation_time": "2026-09-27T05:34:00+00:00",
+  "user_email": "analyst@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-04-02' GROUP BY status",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_27",
+  "creation_time": "2026-09-27T05:33:00+00:00",
+  "user_email": "bi@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT * FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-04-02' AND status = 'Complete' LIMIT 100",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_28",
+  "creation_time": "2026-09-27T05:32:00+00:00",
+  "user_email": "analyst@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-02-14' GROUP BY status",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_29",
+  "creation_time": "2026-09-27T05:31:00+00:00",
+  "user_email": "bi@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT * FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-02-14' AND status = 'Complete' LIMIT 100",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_30",
+  "creation_time": "2026-09-27T05:30:00+00:00",
+  "user_email": "analyst@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-07-03' GROUP BY status",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_31",
+  "creation_time": "2026-09-27T05:29:00+00:00",
+  "user_email": "bi@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT * FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-07-03' AND status = 'Complete' LIMIT 100",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_32",
+  "creation_time": "2026-09-27T05:28:00+00:00",
+  "user_email": "bi@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 1048576,
+  "bytes_processed": 1048576,
+  "slot_ms": 1000,
+  "query": "SELECT * FROM gov_mart.v_top_categories",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_mart",
+    "table_id": "daily_sales"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_33",
+  "creation_time": "2026-09-27T05:27:00+00:00",
+  "user_email": "analyst@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 4194304,
+  "bytes_processed": 4194304,
+  "slot_ms": 1000,
+  "query": "SELECT country, AVG(revenue) FROM gov_mart.customer_ltv GROUP BY country",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_mart",
+    "table_id": "customer_ltv"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_34",
+  "creation_time": "2026-09-26T05:26:00+00:00",
+  "user_email": "etl-sa@demo.iam",
+  "job_type": "QUERY",
+  "statement_type": "CREATE_TABLE_AS_SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 28311552,
+  "bytes_processed": 28311552,
+  "slot_ms": 1000,
+  "query": "CREATE OR REPLACE TABLE gov_staging.stg_order_items AS SELECT oi.id, p.category FROM gov_raw.order_items oi JOIN gov_raw.products p ON p.id = oi.product_id",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   },
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "products"
+   }
+  ],
+  "destination_table": {
+   "project_id": "demo-project",
+   "dataset_id": "gov_staging",
+   "table_id": "stg_order_items"
+  },
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "stg_order_items"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_35",
+  "creation_time": "2026-09-26T05:25:00+00:00",
+  "user_email": "etl-sa@demo.iam",
+  "job_type": "QUERY",
+  "statement_type": "CREATE_TABLE_AS_SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 18874368,
+  "bytes_processed": 18874368,
+  "slot_ms": 1000,
+  "query": "CREATE OR REPLACE TABLE gov_mart.daily_sales AS SELECT order_date, category FROM gov_staging.stg_order_items GROUP BY order_date, category",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_staging",
+    "table_id": "stg_order_items"
+   }
+  ],
+  "destination_table": {
+   "project_id": "demo-project",
+   "dataset_id": "gov_mart",
+   "table_id": "daily_sales"
+  },
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "mart_daily_sales"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_36",
+  "creation_time": "2026-09-26T05:24:00+00:00",
+  "user_email": "etl-sa@demo.iam",
+  "job_type": "QUERY",
+  "statement_type": "CREATE_TABLE_AS_SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 27262976,
+  "bytes_processed": 27262976,
+  "slot_ms": 1000,
+  "query": "CREATE OR REPLACE TABLE gov_mart.customer_ltv AS SELECT s.user_id FROM gov_staging.stg_order_items s JOIN gov_raw.users u ON u.id = s.user_id",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_staging",
+    "table_id": "stg_order_items"
+   },
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "users"
+   }
+  ],
+  "destination_table": {
+   "project_id": "demo-project",
+   "dataset_id": "gov_mart",
+   "table_id": "customer_ltv"
+  },
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "mart_customer_ltv"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_37",
+  "creation_time": "2026-09-26T05:23:00+00:00",
+  "user_email": "analyst@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-04-03' GROUP BY status",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_38",
+  "creation_time": "2026-09-26T05:22:00+00:00",
+  "user_email": "bi@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT * FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-04-03' AND status = 'Complete' LIMIT 100",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_39",
+  "creation_time": "2026-09-26T05:21:00+00:00",
+  "user_email": "analyst@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-09-14' GROUP BY status",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_40",
+  "creation_time": "2026-09-26T05:20:00+00:00",
+  "user_email": "bi@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT * FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-09-14' AND status = 'Complete' LIMIT 100",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_41",
+  "creation_time": "2026-09-26T05:19:00+00:00",
+  "user_email": "analyst@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-01-27' GROUP BY status",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_42",
+  "creation_time": "2026-09-26T05:18:00+00:00",
+  "user_email": "bi@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT * FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-01-27' AND status = 'Complete' LIMIT 100",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_43",
+  "creation_time": "2026-09-26T05:17:00+00:00",
+  "user_email": "bi@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 1048576,
+  "bytes_processed": 1048576,
+  "slot_ms": 1000,
+  "query": "SELECT * FROM gov_mart.v_top_categories",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_mart",
+    "table_id": "daily_sales"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_44",
+  "creation_time": "2026-09-26T05:16:00+00:00",
+  "user_email": "analyst@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": true,
+  "bytes_billed": 0,
+  "bytes_processed": 4194304,
+  "slot_ms": 1000,
+  "query": "SELECT country, AVG(revenue) FROM gov_mart.customer_ltv GROUP BY country",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_mart",
+    "table_id": "customer_ltv"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_45",
+  "creation_time": "2026-09-25T05:15:00+00:00",
+  "user_email": "etl-sa@demo.iam",
+  "job_type": "QUERY",
+  "statement_type": "CREATE_TABLE_AS_SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 28311552,
+  "bytes_processed": 28311552,
+  "slot_ms": 1000,
+  "query": "CREATE OR REPLACE TABLE gov_staging.stg_order_items AS SELECT oi.id, p.category FROM gov_raw.order_items oi JOIN gov_raw.products p ON p.id = oi.product_id",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   },
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "products"
+   }
+  ],
+  "destination_table": {
+   "project_id": "demo-project",
+   "dataset_id": "gov_staging",
+   "table_id": "stg_order_items"
+  },
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "stg_order_items"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_46",
+  "creation_time": "2026-09-25T05:14:00+00:00",
+  "user_email": "etl-sa@demo.iam",
+  "job_type": "QUERY",
+  "statement_type": "CREATE_TABLE_AS_SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 18874368,
+  "bytes_processed": 18874368,
+  "slot_ms": 1000,
+  "query": "CREATE OR REPLACE TABLE gov_mart.daily_sales AS SELECT order_date, category FROM gov_staging.stg_order_items GROUP BY order_date, category",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_staging",
+    "table_id": "stg_order_items"
+   }
+  ],
+  "destination_table": {
+   "project_id": "demo-project",
+   "dataset_id": "gov_mart",
+   "table_id": "daily_sales"
+  },
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "mart_daily_sales"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_47",
+  "creation_time": "2026-09-25T05:13:00+00:00",
+  "user_email": "etl-sa@demo.iam",
+  "job_type": "QUERY",
+  "statement_type": "CREATE_TABLE_AS_SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 27262976,
+  "bytes_processed": 27262976,
+  "slot_ms": 1000,
+  "query": "CREATE OR REPLACE TABLE gov_mart.customer_ltv AS SELECT s.user_id FROM gov_staging.stg_order_items s JOIN gov_raw.users u ON u.id = s.user_id",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_staging",
+    "table_id": "stg_order_items"
+   },
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "users"
+   }
+  ],
+  "destination_table": {
+   "project_id": "demo-project",
+   "dataset_id": "gov_mart",
+   "table_id": "customer_ltv"
+  },
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "mart_customer_ltv"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_48",
+  "creation_time": "2026-09-25T05:12:00+00:00",
+  "user_email": "analyst@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-10-04' GROUP BY status",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_49",
+  "creation_time": "2026-09-25T05:11:00+00:00",
+  "user_email": "bi@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT * FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-10-04' AND status = 'Complete' LIMIT 100",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_50",
+  "creation_time": "2026-09-25T05:10:00+00:00",
+  "user_email": "analyst@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-04-21' GROUP BY status",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_51",
+  "creation_time": "2026-09-25T05:09:00+00:00",
+  "user_email": "bi@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT * FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-04-21' AND status = 'Complete' LIMIT 100",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_52",
+  "creation_time": "2026-09-25T05:08:00+00:00",
+  "user_email": "analyst@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-11-19' GROUP BY status",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_53",
+  "creation_time": "2026-09-25T05:07:00+00:00",
+  "user_email": "bi@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT * FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-11-19' AND status = 'Complete' LIMIT 100",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_54",
+  "creation_time": "2026-09-25T05:06:00+00:00",
+  "user_email": "bi@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 1048576,
+  "bytes_processed": 1048576,
+  "slot_ms": 1000,
+  "query": "SELECT * FROM gov_mart.v_top_categories",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_mart",
+    "table_id": "daily_sales"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_55",
+  "creation_time": "2026-09-25T05:05:00+00:00",
+  "user_email": "analyst@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 4194304,
+  "bytes_processed": 4194304,
+  "slot_ms": 1000,
+  "query": "SELECT country, AVG(revenue) FROM gov_mart.customer_ltv GROUP BY country",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_mart",
+    "table_id": "customer_ltv"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_56",
+  "creation_time": "2026-09-24T05:04:00+00:00",
+  "user_email": "etl-sa@demo.iam",
+  "job_type": "QUERY",
+  "statement_type": "CREATE_TABLE_AS_SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 28311552,
+  "bytes_processed": 28311552,
+  "slot_ms": 1000,
+  "query": "CREATE OR REPLACE TABLE gov_staging.stg_order_items AS SELECT oi.id, p.category FROM gov_raw.order_items oi JOIN gov_raw.products p ON p.id = oi.product_id",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   },
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "products"
+   }
+  ],
+  "destination_table": {
+   "project_id": "demo-project",
+   "dataset_id": "gov_staging",
+   "table_id": "stg_order_items"
+  },
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "stg_order_items"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_57",
+  "creation_time": "2026-09-24T05:03:00+00:00",
+  "user_email": "etl-sa@demo.iam",
+  "job_type": "QUERY",
+  "statement_type": "CREATE_TABLE_AS_SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 18874368,
+  "bytes_processed": 18874368,
+  "slot_ms": 1000,
+  "query": "CREATE OR REPLACE TABLE gov_mart.daily_sales AS SELECT order_date, category FROM gov_staging.stg_order_items GROUP BY order_date, category",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_staging",
+    "table_id": "stg_order_items"
+   }
+  ],
+  "destination_table": {
+   "project_id": "demo-project",
+   "dataset_id": "gov_mart",
+   "table_id": "daily_sales"
+  },
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "mart_daily_sales"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_58",
+  "creation_time": "2026-09-24T05:02:00+00:00",
+  "user_email": "etl-sa@demo.iam",
+  "job_type": "QUERY",
+  "statement_type": "CREATE_TABLE_AS_SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 27262976,
+  "bytes_processed": 27262976,
+  "slot_ms": 1000,
+  "query": "CREATE OR REPLACE TABLE gov_mart.customer_ltv AS SELECT s.user_id FROM gov_staging.stg_order_items s JOIN gov_raw.users u ON u.id = s.user_id",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_staging",
+    "table_id": "stg_order_items"
+   },
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "users"
+   }
+  ],
+  "destination_table": {
+   "project_id": "demo-project",
+   "dataset_id": "gov_mart",
+   "table_id": "customer_ltv"
+  },
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "mart_customer_ltv"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_59",
+  "creation_time": "2026-09-24T05:01:00+00:00",
+  "user_email": "analyst@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-01-19' GROUP BY status",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_60",
+  "creation_time": "2026-09-24T05:00:00+00:00",
+  "user_email": "bi@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT * FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-01-19' AND status = 'Complete' LIMIT 100",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_61",
+  "creation_time": "2026-09-24T04:59:00+00:00",
+  "user_email": "analyst@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-10-13' GROUP BY status",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_62",
+  "creation_time": "2026-09-24T04:58:00+00:00",
+  "user_email": "bi@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT * FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-10-13' AND status = 'Complete' LIMIT 100",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_63",
+  "creation_time": "2026-09-24T04:57:00+00:00",
+  "user_email": "analyst@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-01-08' GROUP BY status",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_64",
+  "creation_time": "2026-09-24T04:56:00+00:00",
+  "user_email": "bi@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT * FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-01-08' AND status = 'Complete' LIMIT 100",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_65",
+  "creation_time": "2026-09-24T04:55:00+00:00",
+  "user_email": "bi@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 1048576,
+  "bytes_processed": 1048576,
+  "slot_ms": 1000,
+  "query": "SELECT * FROM gov_mart.v_top_categories",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_mart",
+    "table_id": "daily_sales"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_66",
+  "creation_time": "2026-09-24T04:54:00+00:00",
+  "user_email": "analyst@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": true,
+  "bytes_billed": 0,
+  "bytes_processed": 4194304,
+  "slot_ms": 1000,
+  "query": "SELECT country, AVG(revenue) FROM gov_mart.customer_ltv GROUP BY country",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_mart",
+    "table_id": "customer_ltv"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_67",
+  "creation_time": "2026-09-23T04:53:00+00:00",
+  "user_email": "etl-sa@demo.iam",
+  "job_type": "QUERY",
+  "statement_type": "CREATE_TABLE_AS_SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 28311552,
+  "bytes_processed": 28311552,
+  "slot_ms": 1000,
+  "query": "CREATE OR REPLACE TABLE gov_staging.stg_order_items AS SELECT oi.id, p.category FROM gov_raw.order_items oi JOIN gov_raw.products p ON p.id = oi.product_id",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   },
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "products"
+   }
+  ],
+  "destination_table": {
+   "project_id": "demo-project",
+   "dataset_id": "gov_staging",
+   "table_id": "stg_order_items"
+  },
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "stg_order_items"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_68",
+  "creation_time": "2026-09-23T04:52:00+00:00",
+  "user_email": "etl-sa@demo.iam",
+  "job_type": "QUERY",
+  "statement_type": "CREATE_TABLE_AS_SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 18874368,
+  "bytes_processed": 18874368,
+  "slot_ms": 1000,
+  "query": "CREATE OR REPLACE TABLE gov_mart.daily_sales AS SELECT order_date, category FROM gov_staging.stg_order_items GROUP BY order_date, category",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_staging",
+    "table_id": "stg_order_items"
+   }
+  ],
+  "destination_table": {
+   "project_id": "demo-project",
+   "dataset_id": "gov_mart",
+   "table_id": "daily_sales"
+  },
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "mart_daily_sales"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_69",
+  "creation_time": "2026-09-23T04:51:00+00:00",
+  "user_email": "etl-sa@demo.iam",
+  "job_type": "QUERY",
+  "statement_type": "CREATE_TABLE_AS_SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 27262976,
+  "bytes_processed": 27262976,
+  "slot_ms": 1000,
+  "query": "CREATE OR REPLACE TABLE gov_mart.customer_ltv AS SELECT s.user_id FROM gov_staging.stg_order_items s JOIN gov_raw.users u ON u.id = s.user_id",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_staging",
+    "table_id": "stg_order_items"
+   },
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "users"
+   }
+  ],
+  "destination_table": {
+   "project_id": "demo-project",
+   "dataset_id": "gov_mart",
+   "table_id": "customer_ltv"
+  },
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "mart_customer_ltv"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_70",
+  "creation_time": "2026-09-23T04:50:00+00:00",
+  "user_email": "analyst@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-01-18' GROUP BY status",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_71",
+  "creation_time": "2026-09-23T04:49:00+00:00",
+  "user_email": "bi@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT * FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-01-18' AND status = 'Complete' LIMIT 100",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_72",
+  "creation_time": "2026-09-23T04:48:00+00:00",
+  "user_email": "analyst@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-03-10' GROUP BY status",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_73",
+  "creation_time": "2026-09-23T04:47:00+00:00",
+  "user_email": "bi@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT * FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-03-10' AND status = 'Complete' LIMIT 100",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_74",
+  "creation_time": "2026-09-23T04:46:00+00:00",
+  "user_email": "analyst@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT status, COUNT(*) n FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-07-05' GROUP BY status",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_75",
+  "creation_time": "2026-09-23T04:45:00+00:00",
+  "user_email": "bi@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 25165824,
+  "bytes_processed": 25165824,
+  "slot_ms": 1000,
+  "query": "SELECT * FROM gov_raw.order_items WHERE created_at >= TIMESTAMP '2024-07-05' AND status = 'Complete' LIMIT 100",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "order_items"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_76",
+  "creation_time": "2026-09-23T04:44:00+00:00",
+  "user_email": "bi@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 1048576,
+  "bytes_processed": 1048576,
+  "slot_ms": 1000,
+  "query": "SELECT * FROM gov_mart.v_top_categories",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_mart",
+    "table_id": "daily_sales"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_77",
+  "creation_time": "2026-09-23T04:43:00+00:00",
+  "user_email": "analyst@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 4194304,
+  "bytes_processed": 4194304,
+  "slot_ms": 1000,
+  "query": "SELECT country, AVG(revenue) FROM gov_mart.customer_ltv GROUP BY country",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_mart",
+    "table_id": "customer_ltv"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_78",
+  "creation_time": "2026-09-28T04:42:00+00:00",
+  "user_email": "analyst@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 14680064,
+  "bytes_processed": 14680064,
+  "slot_ms": 1000,
+  "query": "SELECT 1 FROM gov_raw.orders",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "orders"
+   }
+  ],
+  "destination_table": {
+   "project_id": "demo-project",
+   "dataset_id": "_abc123",
+   "table_id": "anon_xyz"
+  },
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": null
+ },
+ {
+  "job_id": "job_79",
+  "creation_time": "2026-09-28T04:41:00+00:00",
+  "user_email": "analyst@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 0,
+  "bytes_processed": 0,
+  "slot_ms": 1000,
+  "query": "SELECT broken FROM gov_raw.orders",
+  "referenced_tables": [
+   {
+    "project_id": "demo-project",
+    "dataset_id": "gov_raw",
+    "table_id": "orders"
+   }
+  ],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "adhoc"
+   }
+  ],
+  "error_reason": "invalidQuery"
+ },
+ {
+  "job_id": "job_80",
+  "creation_time": "2026-09-30T04:40:00+00:00",
+  "user_email": "me@example.com",
+  "job_type": "QUERY",
+  "statement_type": "SELECT",
+  "state": "DONE",
+  "cache_hit": false,
+  "bytes_billed": 10485760,
+  "bytes_processed": 10485760,
+  "slot_ms": 1000,
+  "query": "SELECT * FROM `region-us`.INFORMATION_SCHEMA.TABLE_STORAGE",
+  "referenced_tables": [],
+  "destination_table": null,
+  "labels": [
+   {
+    "key": "pipeline",
+    "value": "x"
+   },
+   {
+    "key": "tool",
+    "value": "bqgov"
+   }
+  ],
+  "error_reason": null
+ }
+]

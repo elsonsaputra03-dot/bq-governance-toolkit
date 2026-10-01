@@ -1,0 +1,6 @@
+[
+ {
+  "table": "v_top_categories",
+  "view_definition": "SELECT category, SUM(revenue) AS revenue FROM `demo-project.gov_mart.daily_sales` GROUP BY category"
+ }
+]

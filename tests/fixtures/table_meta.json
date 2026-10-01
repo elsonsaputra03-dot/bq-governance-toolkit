@@ -1,0 +1,24 @@
+{
+ "gov_mart.daily_sales": {
+  "num_rows": 19000,
+  "num_bytes": 1048576,
+  "modified": "2026-09-30T01:00:00+00:00",
+  "created": "2026-09-30T06:00:00+00:00",
+  "description": "x",
+  "partitioning": null,
+  "clustering": [],
+  "expires": null,
+  "schema": []
+ },
+ "gov_mart.customer_ltv": {
+  "num_rows": 80000,
+  "num_bytes": 4194304,
+  "modified": "2026-09-27T18:00:00+00:00",
+  "created": "2026-09-30T06:00:00+00:00",
+  "description": "",
+  "partitioning": null,
+  "clustering": [],
+  "expires": null,
+  "schema": []
+ }
+}

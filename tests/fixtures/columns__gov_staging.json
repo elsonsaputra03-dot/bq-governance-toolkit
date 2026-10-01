@@ -1,0 +1,92 @@
+[
+ {
+  "table": "stg_order_items",
+  "column": "order_item_id",
+  "data_type": "INT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "stg_order_items",
+  "column": "order_id",
+  "data_type": "INT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "stg_order_items",
+  "column": "user_id",
+  "data_type": "INT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "stg_order_items",
+  "column": "order_date",
+  "data_type": "DATE",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": "Order date"
+ },
+ {
+  "table": "stg_order_items",
+  "column": "status",
+  "data_type": "STRING",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "stg_order_items",
+  "column": "category",
+  "data_type": "STRING",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "stg_order_items",
+  "column": "department",
+  "data_type": "STRING",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "stg_order_items",
+  "column": "brand",
+  "data_type": "STRING",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "stg_order_items",
+  "column": "sale_price",
+  "data_type": "FLOAT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "stg_order_items",
+  "column": "cost",
+  "data_type": "FLOAT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ }
+]

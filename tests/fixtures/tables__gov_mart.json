@@ -1,0 +1,20 @@
+[
+ {
+  "table": "daily_sales",
+  "table_type": "BASE TABLE",
+  "creation_time": "2026-08-21T06:00:00+00:00",
+  "description_raw": "\"Daily revenue and margin by product category\""
+ },
+ {
+  "table": "customer_ltv",
+  "table_type": "BASE TABLE",
+  "creation_time": "2026-08-21T06:00:00+00:00",
+  "description_raw": null
+ },
+ {
+  "table": "v_top_categories",
+  "table_type": "VIEW",
+  "creation_time": "2026-09-30T06:00:00+00:00",
+  "description_raw": null
+ }
+]

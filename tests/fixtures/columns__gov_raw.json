@@ -1,0 +1,335 @@
+[
+ {
+  "table": "orders",
+  "column": "order_id",
+  "data_type": "INT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": "One order"
+ },
+ {
+  "table": "orders",
+  "column": "user_id",
+  "data_type": "INT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "orders",
+  "column": "status",
+  "data_type": "STRING",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "orders",
+  "column": "created_at",
+  "data_type": "TIMESTAMP",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "orders",
+  "column": "shipped_at",
+  "data_type": "TIMESTAMP",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "orders",
+  "column": "delivered_at",
+  "data_type": "TIMESTAMP",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "orders",
+  "column": "returned_at",
+  "data_type": "TIMESTAMP",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "orders",
+  "column": "num_of_item",
+  "data_type": "INT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "order_items",
+  "column": "id",
+  "data_type": "INT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "order_items",
+  "column": "order_id",
+  "data_type": "INT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "order_items",
+  "column": "user_id",
+  "data_type": "INT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "order_items",
+  "column": "product_id",
+  "data_type": "INT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "order_items",
+  "column": "status",
+  "data_type": "STRING",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "order_items",
+  "column": "created_at",
+  "data_type": "TIMESTAMP",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "order_items",
+  "column": "shipped_at",
+  "data_type": "TIMESTAMP",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "order_items",
+  "column": "delivered_at",
+  "data_type": "TIMESTAMP",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "order_items",
+  "column": "returned_at",
+  "data_type": "TIMESTAMP",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "order_items",
+  "column": "sale_price",
+  "data_type": "FLOAT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "products",
+  "column": "id",
+  "data_type": "INT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": "Product id"
+ },
+ {
+  "table": "products",
+  "column": "cost",
+  "data_type": "FLOAT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": "Unit cost"
+ },
+ {
+  "table": "products",
+  "column": "category",
+  "data_type": "STRING",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": "Category"
+ },
+ {
+  "table": "products",
+  "column": "name",
+  "data_type": "STRING",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": "Name"
+ },
+ {
+  "table": "products",
+  "column": "brand",
+  "data_type": "STRING",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": "Brand"
+ },
+ {
+  "table": "products",
+  "column": "retail_price",
+  "data_type": "FLOAT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": "List price"
+ },
+ {
+  "table": "products",
+  "column": "department",
+  "data_type": "STRING",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": "Department"
+ },
+ {
+  "table": "products",
+  "column": "distribution_center_id",
+  "data_type": "INT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": "Warehouse"
+ },
+ {
+  "table": "users",
+  "column": "id",
+  "data_type": "INT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "users",
+  "column": "age",
+  "data_type": "INT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "users",
+  "column": "gender",
+  "data_type": "STRING",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "users",
+  "column": "state",
+  "data_type": "STRING",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "users",
+  "column": "city",
+  "data_type": "STRING",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "users",
+  "column": "country",
+  "data_type": "STRING",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "users",
+  "column": "traffic_source",
+  "data_type": "STRING",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "users",
+  "column": "created_at",
+  "data_type": "TIMESTAMP",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "legacy_product_snapshot",
+  "column": "id",
+  "data_type": "INT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "legacy_product_snapshot",
+  "column": "cost",
+  "data_type": "FLOAT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "legacy_product_snapshot",
+  "column": "category",
+  "data_type": "STRING",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ }
+]

@@ -1,0 +1,110 @@
+[
+ {
+  "table": "daily_sales",
+  "column": "order_date",
+  "data_type": "DATE",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": "Calendar date of the order"
+ },
+ {
+  "table": "daily_sales",
+  "column": "category",
+  "data_type": "STRING",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": "Product category"
+ },
+ {
+  "table": "daily_sales",
+  "column": "orders",
+  "data_type": "INT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": "Distinct orders"
+ },
+ {
+  "table": "daily_sales",
+  "column": "items",
+  "data_type": "INT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": "Order items"
+ },
+ {
+  "table": "daily_sales",
+  "column": "revenue",
+  "data_type": "FLOAT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": "Revenue in USD"
+ },
+ {
+  "table": "daily_sales",
+  "column": "margin",
+  "data_type": "FLOAT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": "Revenue minus cost in USD"
+ },
+ {
+  "table": "customer_ltv",
+  "column": "user_id",
+  "data_type": "INT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "customer_ltv",
+  "column": "country",
+  "data_type": "STRING",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "customer_ltv",
+  "column": "traffic_source",
+  "data_type": "STRING",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "customer_ltv",
+  "column": "first_order",
+  "data_type": "DATE",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "customer_ltv",
+  "column": "orders",
+  "data_type": "INT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ },
+ {
+  "table": "customer_ltv",
+  "column": "revenue",
+  "data_type": "FLOAT64",
+  "is_nullable": "YES",
+  "is_partitioning_column": "NO",
+  "clustering_ordinal_position": null,
+  "description": null
+ }
+]

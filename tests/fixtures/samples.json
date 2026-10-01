@@ -1,0 +1,14 @@
+{
+ "gov_raw.users": [
+  {
+   "id": 1,
+   "age": 34,
+   "gender": "F",
+   "state": "Texas",
+   "city": "Austin",
+   "country": "United States",
+   "traffic_source": "Search",
+   "created_at": "2023-01-02T00:00:00"
+  }
+ ]
+}

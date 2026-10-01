@@ -1,0 +1,44 @@
+# Salin ke config.yaml lalu sesuaikan. Semua harga adalah list price; cek harga region Anda.
+project: your-gcp-project-id
+location: US                      # region dataset; dipakai sebagai `region-us` di INFORMATION_SCHEMA
+datasets: [gov_raw, gov_staging, gov_mart]   # dataset yang dikatalogkan (dictionary, DQ, deskripsi)
+lookback_days: 30                 # jendela riwayat job untuk biaya, lineage, dan pemakaian
+
+guards:
+  max_bytes_billed: 1073741824    # 1 GiB per query toolkit; query yang melebihi batas ditolak BigQuery, bukan ditagih
+  dry_run_first: true             # estimasi byte dulu sebelum menjalankan query DQ
+
+prices:                           # USD
+  on_demand_per_tib: 6.25
+  active_storage_per_gib_month: 0.02
+  long_term_storage_per_gib_month: 0.01
+
+finops:
+  expensive_query_usd: 0.05       # job di atas ini masuk daftar query mahal (demo kecil; produksi biasanya jauh lebih besar)
+  full_scan_ratio: 0.9            # job dianggap full scan bila byte billed >= 90% ukuran tabel yang dibaca
+  partition_min_gib: 0.01         # tabel di atas ukuran ini dipertimbangkan untuk partitioning (demo); produksi mis. 10
+  cluster_min_gib: 0.01
+  pipeline_label: pipeline        # label job untuk mengelompokkan biaya per pipeline
+  unused_days: 30                 # tabel tanpa pembacaan selama ini masuk kandidat cleanup
+
+dq:                               # cek data quality per tabel (opsional per item)
+  - table: gov_mart.daily_sales
+    freshness_hours: [26, 50]     # warn, fail
+    min_rows: 100
+    row_change_pct: [30, 60]      # perubahan jumlah baris vs snapshot sebelumnya
+    not_null: [order_date, revenue]
+    null_pct: [0.1, 1.0]
+    unique_key: [order_date, category]
+  - table: gov_mart.customer_ltv
+    freshness_hours: [26, 50]
+    not_null: [user_id]
+    unique_key: [user_id]
+
+describe:
+  provider: gemini                # gemini | ollama | none
+  model: gemini-2.5-flash         # ganti dengan model yang tersedia untuk akun Anda
+  ollama_url: http://localhost:11434
+  language: en
+
+publish:
+  redact_users: true              # email di laporan diganti user-xxxxxx sebelum ditulis (aman untuk repo publik)

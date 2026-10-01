@@ -1,0 +1,32 @@
+[
+ {
+  "table": "orders",
+  "table_type": "BASE TABLE",
+  "creation_time": "2026-08-21T06:00:00+00:00",
+  "description_raw": "\"One row per order\""
+ },
+ {
+  "table": "order_items",
+  "table_type": "BASE TABLE",
+  "creation_time": "2026-08-21T06:00:00+00:00",
+  "description_raw": null
+ },
+ {
+  "table": "products",
+  "table_type": "BASE TABLE",
+  "creation_time": "2026-08-21T06:00:00+00:00",
+  "description_raw": null
+ },
+ {
+  "table": "users",
+  "table_type": "BASE TABLE",
+  "creation_time": "2026-08-21T06:00:00+00:00",
+  "description_raw": "\"Customers without direct identifiers\""
+ },
+ {
+  "table": "legacy_product_snapshot",
+  "table_type": "BASE TABLE",
+  "creation_time": "2026-08-21T06:00:00+00:00",
+  "description_raw": null
+ }
+]
