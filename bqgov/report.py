@@ -54,6 +54,7 @@ def markdown(r: dict) -> str:
     L = [f"# BigQuery governance report: `{m['project']}`", "",
          f"Collected {m['collected_at']} · job window {m['lookback_days']} days · location {m['location']} · "
          f"prices: ${m['prices']['on_demand_per_tib']}/TiB on-demand (estimates from list price, not a billing export)", "",
+         *([f"> **Warning:** {w}" for w in m.get("warnings", [])] + ([""] if m.get("warnings") else [])),
          "## Summary", "", "| Metric | Value |", "|---|---|",
          f"| Tables / columns | {s['tables']} / {s['columns']} |", f"| Column descriptions | {s['column_doc_pct']}% |",
          f"| Table descriptions | {s['table_doc_pct']}% |", f"| Storage | {s['storage_gib']} GiB, {_usd(s['storage_usd_month'])}/month |",

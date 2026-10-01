@@ -1,0 +1,52 @@
+[
+ {
+  "dataset": "gov_raw",
+  "table": "orders",
+  "total_rows": 125000,
+  "total_logical_bytes": 14680064,
+  "active_logical_bytes": 14680064,
+  "long_term_logical_bytes": 0,
+  "total_physical_bytes": null,
+  "storage_last_modified_time": "2026-09-30T06:00:00+00:00"
+ },
+ {
+  "dataset": "gov_raw",
+  "table": "order_items",
+  "total_rows": 181000,
+  "total_logical_bytes": 25165824,
+  "active_logical_bytes": 25165824,
+  "long_term_logical_bytes": 0,
+  "total_physical_bytes": null,
+  "storage_last_modified_time": "2026-09-30T06:00:00+00:00"
+ },
+ {
+  "dataset": "gov_raw",
+  "table": "products",
+  "total_rows": 29000,
+  "total_logical_bytes": 3145728,
+  "active_logical_bytes": 3145728,
+  "long_term_logical_bytes": 0,
+  "total_physical_bytes": null,
+  "storage_last_modified_time": "2026-09-30T06:00:00+00:00"
+ },
+ {
+  "dataset": "gov_raw",
+  "table": "users",
+  "total_rows": 100000,
+  "total_logical_bytes": 8388608,
+  "active_logical_bytes": 8388608,
+  "long_term_logical_bytes": 0,
+  "total_physical_bytes": null,
+  "storage_last_modified_time": "2026-09-30T06:00:00+00:00"
+ },
+ {
+  "dataset": "gov_raw",
+  "table": "legacy_product_snapshot",
+  "total_rows": 29000,
+  "total_logical_bytes": 3145728,
+  "active_logical_bytes": 3145728,
+  "long_term_logical_bytes": 0,
+  "total_physical_bytes": null,
+  "storage_last_modified_time": "2026-09-30T06:00:00+00:00"
+ }
+]

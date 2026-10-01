@@ -41,7 +41,17 @@ def main(argv=None) -> int:
     out.mkdir(parents=True, exist_ok=True)
 
     if a.cmd == "run":
-        snap = collect_mod.collect(cfg, runner)
+        try:
+            snap = collect_mod.collect(cfg, runner)
+        except Exception as exc:  # noqa: BLE001
+            if not collect_mod.is_permission_error(exc):
+                raise
+            print(f"error: access denied while reading BigQuery metadata.\n  {str(exc).splitlines()[0][:300]}\n"
+                  f"  Grant the identity running bqgov: {collect_mod.ROLE_HINT['jobs']}; "
+                  f"{collect_mod.ROLE_HINT['storage']}; roles/bigquery.jobUser.", file=sys.stderr)
+            return 3
+        for w in snap["meta"]["warnings"]:
+            print(f"warning: {w}", file=sys.stderr)
         dq = dq_mod.run(cfg, runner, previous=_latest(out))
         rep = report_mod.build(snap, dq, cfg.finops)
         rep["meta"]["toolkit_bytes_billed"] = runner.bytes_billed

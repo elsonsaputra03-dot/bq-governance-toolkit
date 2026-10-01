@@ -34,7 +34,21 @@ python demo/workload.py --project elson-bqgov --rounds 2
 ```
 Jalankan di **2–3 hari berbeda** supaya tren biaya per hari terisi. Satu putaran ±1 GB dari kuota 1 TiB.
 
-## 5. Jalankan toolkit
+## 5. Izin IAM (wajib, walaupun Anda Owner)
+Role Owner **tidak** mencakup akses ke `INFORMATION_SCHEMA.TABLE_STORAGE`. Tambahkan secara eksplisit (berlaku 1–2 menit):
+```bash
+P=elson-bqgov; U=$(gcloud config get-value account)
+for R in roles/bigquery.metadataViewer roles/bigquery.resourceViewer; do
+  gcloud projects add-iam-policy-binding $P --member="user:$U" --role="$R" --condition=None --quiet
+done
+```
+
+Lalu aktifkan pengumpulan data storage (sekali per project; data muncul dalam ±1 hari, sementara itu toolkit memakai Tables API):
+```bash
+bq query --use_legacy_sql=false 'ALTER PROJECT `elson-bqgov` SET OPTIONS (`region-us.enable_info_schema_storage` = TRUE)'
+```
+
+## 6. Jalankan toolkit
 ```bash
 cp config.example.yaml config.yaml      # isi project: elson-bqgov
 bqgov -v run
@@ -42,7 +56,7 @@ cat snapshots/REPORT.md
 ```
 Exit code 1 berarti ada cek DQ yang `fail` (berguna di CI). Contoh: `customer_ltv` di demo memang tidak dibangun ulang tiap hari.
 
-## 6. Deskripsi dengan AI (opsional)
+## 7. Deskripsi dengan AI (opsional)
 ```bash
 export GEMINI_API_KEY=...               # dari Google AI Studio; atau set describe.provider: ollama
 bqgov describe                          # menulis descriptions.yaml, tidak mengubah BigQuery

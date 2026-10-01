@@ -1,0 +1,12 @@
+[
+ {
+  "dataset": "gov_staging",
+  "table": "stg_order_items",
+  "total_rows": 172000,
+  "total_logical_bytes": 18874368,
+  "active_logical_bytes": 18874368,
+  "long_term_logical_bytes": 0,
+  "total_physical_bytes": null,
+  "storage_last_modified_time": "2026-09-30T06:00:00+00:00"
+ }
+]

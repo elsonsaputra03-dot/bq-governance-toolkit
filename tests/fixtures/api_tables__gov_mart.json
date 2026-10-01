@@ -1,0 +1,22 @@
+[
+ {
+  "dataset": "gov_mart",
+  "table": "daily_sales",
+  "total_rows": 19000,
+  "total_logical_bytes": 1048576,
+  "active_logical_bytes": 1048576,
+  "long_term_logical_bytes": 0,
+  "total_physical_bytes": null,
+  "storage_last_modified_time": "2026-09-30T06:00:00+00:00"
+ },
+ {
+  "dataset": "gov_mart",
+  "table": "customer_ltv",
+  "total_rows": 80000,
+  "total_logical_bytes": 4194304,
+  "active_logical_bytes": 4194304,
+  "long_term_logical_bytes": 0,
+  "total_physical_bytes": null,
+  "storage_last_modified_time": "2026-09-30T06:00:00+00:00"
+ }
+]

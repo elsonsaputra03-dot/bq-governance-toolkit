@@ -143,3 +143,27 @@ def test_published_report_has_no_emails(tmp_path):
     cli.main(["-c", str(HERE / "config.test.yaml"), "--fixtures", str(HERE / "fixtures"), "-o", str(tmp_path), "run"])
     text = (tmp_path / "latest.json").read_text() + (tmp_path / "REPORT.md").read_text()
     assert "@" not in text.replace("@days", "") and "user-" in text
+
+
+def test_storage_falls_back_to_tables_api_when_forbidden(cfg):
+    snap = collect.collect(cfg, FixtureRunner(HERE / "fixtures", forbidden={"storage"}))
+    assert snap["meta"]["storage_source"] == "tables_api" and "metadataViewer" in snap["meta"]["warnings"][0]
+    assert len(snap["storage"]) == 8 and all(r["long_term_logical_bytes"] == 0 for r in snap["storage"])
+    rep = report.build(snap, [], cfg.finops)
+    assert "Warning" in report.markdown(rep) and rep["recommendations"]         # analisis tetap jalan
+
+
+def test_jobs_forbidden_gives_short_error(tmp_path, capsys, monkeypatch):
+    real = FixtureRunner.__init__
+    monkeypatch.setattr(FixtureRunner, "__init__", lambda self, folder, forbidden=None: real(self, folder, {"jobs"}))
+    rc = cli.main(["-c", str(HERE / "config.test.yaml"), "--fixtures", str(HERE / "fixtures"), "-o", str(tmp_path), "run"])
+    err = capsys.readouterr().err
+    assert rc == 3 and "resourceViewer" in err and "Traceback" not in err
+
+
+def test_storage_falls_back_when_not_enabled(cfg):
+    r = FixtureRunner(HERE / "fixtures"); r.disabled = {"storage"}
+    snap = collect.collect(cfg, r)
+    w = snap["meta"]["warnings"][0]
+    assert snap["meta"]["storage_source"] == "tables_api" and "enable_info_schema_storage" in w and "ALTER PROJECT `demo-project`" in w
+    assert len(snap["storage"]) == 8

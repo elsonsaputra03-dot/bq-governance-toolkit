@@ -18,6 +18,7 @@ class Runner(Protocol):
     def dry_run_bytes(self, sql: str, params: dict | None = None) -> int: ...
     def table_meta(self, table_ref: str) -> dict: ...
     def sample_rows(self, table_ref: str, columns: list[str], n: int = 5) -> list[dict]: ...
+    def dataset_tables(self, dataset: str) -> list[dict]: ...
 
 
 def _plain(v: Any) -> Any:
@@ -74,16 +75,34 @@ class BigQueryRunner:
         return [{k: _plain(v) for k, v in dict(r).items()} for r in self.client.list_rows(t, selected_fields=fields, max_results=n)]
 
 
+    def dataset_tables(self, dataset: str) -> list[dict]:
+        """Ukuran & jumlah baris per tabel lewat Tables API (gratis). Dipakai bila TABLE_STORAGE tidak boleh dibaca."""
+        out = []
+        for item in self.client.list_tables(f"{self.client.project}.{dataset}"):
+            if item.table_type not in ("TABLE", "MATERIALIZED_VIEW"):
+                continue
+            t = self.client.get_table(item.reference)
+            out.append({"dataset": dataset, "table": t.table_id, "total_rows": t.num_rows or 0, "total_logical_bytes": t.num_bytes or 0,
+                        "active_logical_bytes": t.num_bytes or 0, "long_term_logical_bytes": 0, "total_physical_bytes": None,
+                        "storage_last_modified_time": _plain(t.modified)})
+        return out
+
+
 class FixtureRunner:
     """Memutar ulang hasil dari tests/fixtures/<name>.json; untuk test dan demo tanpa akun GCP."""
 
-    def __init__(self, folder: str | Path):
+    def __init__(self, folder: str | Path, forbidden: set[str] | None = None):
         self.folder = Path(folder)
         self.bytes_billed = 0
         self.calls: list[str] = []
+        self.forbidden = forbidden or set()
 
     def query(self, name: str, sql: str, params: dict | None = None) -> list[dict]:
         self.calls.append(name)
+        if name in self.forbidden:
+            raise PermissionError(f"403 Access Denied (simulated) for {name}")
+        if name in getattr(self, "disabled", set()):
+            raise RuntimeError(f"400 INFORMATION_SCHEMA.TABLE_STORAGE hasn't been enabled (simulated) for {name}")
         f = self.folder / f"{name}.json"
         return json.loads(f.read_text(encoding="utf-8")) if f.exists() else []
 
@@ -94,6 +113,10 @@ class FixtureRunner:
         f = self.folder / "samples.json"
         rows = json.loads(f.read_text(encoding="utf-8")).get(table_ref.split(".", 1)[-1], []) if f.exists() else []
         return [{k: v for k, v in r.items() if k in columns} for r in rows][:n]
+
+    def dataset_tables(self, dataset: str) -> list[dict]:
+        f = self.folder / f"api_tables__{dataset}.json"
+        return json.loads(f.read_text(encoding="utf-8")) if f.exists() else []
 
     def table_meta(self, table_ref: str) -> dict:
         meta = json.loads((self.folder / "table_meta.json").read_text(encoding="utf-8"))

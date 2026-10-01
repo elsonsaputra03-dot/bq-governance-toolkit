@@ -83,7 +83,17 @@ Step-by-step guide in Indonesian: [docs/SETUP_ID.md](docs/SETUP_ID.md). Tests ru
 
 **Permissions** for the identity running it: BigQuery Job User (run queries), Resource Viewer (`bigquery.jobs.listAll`, needed for
 `JOBS_BY_PROJECT`), Metadata Viewer (storage and schemas), and Data Viewer on datasets with DQ checks. `describe --apply` also needs
-Data Editor on the datasets it documents.
+Data Editor on the datasets it documents. **Project Owner alone is not enough** for `INFORMATION_SCHEMA.TABLE_STORAGE`: grant Metadata
+Viewer explicitly (found on the first real run). If it is missing, the toolkit falls back to the free Tables API for storage, without the
+active/long-term split, and says so in the report. The same fallback applies when `TABLE_STORAGE` collection has not been enabled for
+the project yet (a one-time `ALTER PROJECT ... SET OPTIONS (\`region-us.enable_info_schema_storage\` = TRUE)`; data appears within about
+a day).
+
+```bash
+for R in roles/bigquery.metadataViewer roles/bigquery.resourceViewer; do
+  gcloud projects add-iam-policy-binding PROJECT --member="user:$(gcloud config get-value account)" --role="$R" --condition=None
+done
+```
 
 Published reports replace every email with a stable `user-xxxxxx` id (`publish.redact_users`, on by default).
 
