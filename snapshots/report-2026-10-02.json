@@ -6,7 +6,7 @@
   "storage_source": "information_schema+tables_api",
   "project": "concrete-list-461509-g8",
   "location": "US",
-  "collected_at": "2026-10-02T04:37:35+00:00",
+  "collected_at": "2026-10-02T05:06:58+00:00",
   "lookback_days": 30,
   "datasets": [
    "gov_raw",
@@ -18,15 +18,15 @@
    "active_storage_per_gib_month": 0.02,
    "long_term_storage_per_gib_month": 0.01
   },
-  "toolkit_jobs_in_window": 44,
-  "toolkit_bytes_in_window": 471859200,
-  "toolkit_bytes_billed": 83886080
+  "toolkit_jobs_in_window": 88,
+  "toolkit_bytes_in_window": 1142947840,
+  "toolkit_bytes_billed": 104857600
  },
  "summary": {
   "tables": 9,
   "columns": 66,
-  "column_doc_pct": 0.0,
-  "table_doc_pct": 33.3,
+  "column_doc_pct": 100.0,
+  "table_doc_pct": 100.0,
   "storage_gib": 0.048,
   "storage_usd_month": 0.001,
   "dq": {
@@ -361,7 +361,7 @@
    "cost_usd_month": 6.732037290930748e-05
   },
   {
-   "table": "concrete-list-461509-g8.gov_raw.products",
+   "table": "concrete-list-461509-g8.gov_raw.legacy_product_snapshot",
    "rows": 29120,
    "logical_bytes": 3295895,
    "active_gib": 0.0030695414170622826,
@@ -369,7 +369,7 @@
    "cost_usd_month": 6.139082834124565e-05
   },
   {
-   "table": "concrete-list-461509-g8.gov_raw.legacy_product_snapshot",
+   "table": "concrete-list-461509-g8.gov_raw.products",
    "rows": 29120,
    "logical_bytes": 3295895,
    "active_gib": 0.0030695414170622826,
@@ -746,7 +746,7 @@
    "table": "concrete-list-461509-g8.gov_mart.customer_ltv",
    "column": "user_id",
    "type": "INT64",
-   "description": "",
+   "description": "Customer identifier (gov_raw.users.id); one row per customer.",
    "partitioning": false,
    "clustering": null
   },
@@ -754,7 +754,7 @@
    "table": "concrete-list-461509-g8.gov_mart.customer_ltv",
    "column": "country",
    "type": "STRING",
-   "description": "",
+   "description": "Country of the customer, from gov_raw.users.",
    "partitioning": false,
    "clustering": null
   },
@@ -762,7 +762,7 @@
    "table": "concrete-list-461509-g8.gov_mart.customer_ltv",
    "column": "traffic_source",
    "type": "STRING",
-   "description": "",
+   "description": "Channel through which the customer was acquired, from gov_raw.users.",
    "partitioning": false,
    "clustering": null
   },
@@ -770,7 +770,7 @@
    "table": "concrete-list-461509-g8.gov_mart.customer_ltv",
    "column": "first_order",
    "type": "DATE",
-   "description": "",
+   "description": "Date of the customer's first non-cancelled order.",
    "partitioning": false,
    "clustering": null
   },
@@ -778,7 +778,7 @@
    "table": "concrete-list-461509-g8.gov_mart.customer_ltv",
    "column": "orders",
    "type": "INT64",
-   "description": "",
+   "description": "Number of distinct non-cancelled orders placed by the customer.",
    "partitioning": false,
    "clustering": null
   },
@@ -786,7 +786,7 @@
    "table": "concrete-list-461509-g8.gov_mart.customer_ltv",
    "column": "revenue",
    "type": "FLOAT64",
-   "description": "",
+   "description": "Total sale price of the customer's non-cancelled order items.",
    "partitioning": false,
    "clustering": null
   },
@@ -794,7 +794,7 @@
    "table": "concrete-list-461509-g8.gov_mart.daily_sales",
    "column": "order_date",
    "type": "DATE",
-   "description": "",
+   "description": "Calendar date the order items were created.",
    "partitioning": false,
    "clustering": null
   },
@@ -802,7 +802,7 @@
    "table": "concrete-list-461509-g8.gov_mart.daily_sales",
    "column": "category",
    "type": "STRING",
-   "description": "",
+   "description": "Product category.",
    "partitioning": false,
    "clustering": null
   },
@@ -810,7 +810,7 @@
    "table": "concrete-list-461509-g8.gov_mart.daily_sales",
    "column": "orders",
    "type": "INT64",
-   "description": "",
+   "description": "Number of distinct orders with at least one non-cancelled item.",
    "partitioning": false,
    "clustering": null
   },
@@ -818,7 +818,7 @@
    "table": "concrete-list-461509-g8.gov_mart.daily_sales",
    "column": "items",
    "type": "INT64",
-   "description": "",
+   "description": "Number of non-cancelled order items.",
    "partitioning": false,
    "clustering": null
   },
@@ -826,7 +826,7 @@
    "table": "concrete-list-461509-g8.gov_mart.daily_sales",
    "column": "revenue",
    "type": "FLOAT64",
-   "description": "",
+   "description": "Sum of sale price of non-cancelled order items.",
    "partitioning": false,
    "clustering": null
   },
@@ -834,7 +834,7 @@
    "table": "concrete-list-461509-g8.gov_mart.daily_sales",
    "column": "margin",
    "type": "FLOAT64",
-   "description": "",
+   "description": "Gross margin amount - sum of sale price minus product cost.",
    "partitioning": false,
    "clustering": null
   },
@@ -842,7 +842,7 @@
    "table": "concrete-list-461509-g8.gov_mart.v_top_categories",
    "column": "category",
    "type": "STRING",
-   "description": "",
+   "description": "Product category.",
    "partitioning": false,
    "clustering": null
   },
@@ -850,7 +850,7 @@
    "table": "concrete-list-461509-g8.gov_mart.v_top_categories",
    "column": "revenue",
    "type": "FLOAT64",
-   "description": "",
+   "description": "Revenue for the category over the last 90 days, from gov_mart.daily_sales.",
    "partitioning": false,
    "clustering": null
   },
@@ -858,7 +858,7 @@
    "table": "concrete-list-461509-g8.gov_raw.legacy_product_snapshot",
    "column": "id",
    "type": "INT64",
-   "description": "",
+   "description": "Product identifier, same as gov_raw.products.id.",
    "partitioning": false,
    "clustering": null
   },
@@ -866,7 +866,7 @@
    "table": "concrete-list-461509-g8.gov_raw.legacy_product_snapshot",
    "column": "cost",
    "type": "FLOAT64",
-   "description": "",
+   "description": "Unit cost of the product to the business.",
    "partitioning": false,
    "clustering": null
   },
@@ -874,7 +874,7 @@
    "table": "concrete-list-461509-g8.gov_raw.legacy_product_snapshot",
    "column": "category",
    "type": "STRING",
-   "description": "",
+   "description": "Product category.",
    "partitioning": false,
    "clustering": null
   },
@@ -882,7 +882,7 @@
    "table": "concrete-list-461509-g8.gov_raw.legacy_product_snapshot",
    "column": "name",
    "type": "STRING",
-   "description": "",
+   "description": "Product name.",
    "partitioning": false,
    "clustering": null
   },
@@ -890,7 +890,7 @@
    "table": "concrete-list-461509-g8.gov_raw.legacy_product_snapshot",
    "column": "brand",
    "type": "STRING",
-   "description": "",
+   "description": "Product brand name.",
    "partitioning": false,
    "clustering": null
   },
@@ -898,7 +898,7 @@
    "table": "concrete-list-461509-g8.gov_raw.legacy_product_snapshot",
    "column": "retail_price",
    "type": "FLOAT64",
-   "description": "",
+   "description": "List price of the product.",
    "partitioning": false,
    "clustering": null
   },
@@ -906,7 +906,7 @@
    "table": "concrete-list-461509-g8.gov_raw.legacy_product_snapshot",
    "column": "department",
    "type": "STRING",
-   "description": "",
+   "description": "Product department.",
    "partitioning": false,
    "clustering": null
   },
@@ -914,7 +914,7 @@
    "table": "concrete-list-461509-g8.gov_raw.legacy_product_snapshot",
    "column": "distribution_center_id",
    "type": "INT64",
-   "description": "",
+   "description": "Identifier of the distribution center that holds the product.",
    "partitioning": false,
    "clustering": null
   },
@@ -922,7 +922,7 @@
    "table": "concrete-list-461509-g8.gov_raw.order_items",
    "column": "id",
    "type": "INT64",
-   "description": "",
+   "description": "Order item identifier; one row per item.",
    "partitioning": false,
    "clustering": null
   },
@@ -930,7 +930,7 @@
    "table": "concrete-list-461509-g8.gov_raw.order_items",
    "column": "order_id",
    "type": "INT64",
-   "description": "",
+   "description": "Identifier of the parent order (gov_raw.orders.order_id).",
    "partitioning": false,
    "clustering": null
   },
@@ -938,7 +938,7 @@
    "table": "concrete-list-461509-g8.gov_raw.order_items",
    "column": "user_id",
    "type": "INT64",
-   "description": "",
+   "description": "Identifier of the customer who placed the order (gov_raw.users.id).",
    "partitioning": false,
    "clustering": null
   },
@@ -946,7 +946,7 @@
    "table": "concrete-list-461509-g8.gov_raw.order_items",
    "column": "product_id",
    "type": "INT64",
-   "description": "",
+   "description": "Identifier of the product (gov_raw.products.id).",
    "partitioning": false,
    "clustering": null
   },
@@ -954,7 +954,7 @@
    "table": "concrete-list-461509-g8.gov_raw.order_items",
    "column": "status",
    "type": "STRING",
-   "description": "",
+   "description": "Fulfillment status of the order item, e.g. Complete, Shipped, Cancelled, Returned.",
    "partitioning": false,
    "clustering": null
   },
@@ -962,7 +962,7 @@
    "table": "concrete-list-461509-g8.gov_raw.order_items",
    "column": "created_at",
    "type": "TIMESTAMP",
-   "description": "",
+   "description": "Timestamp when the order item was created.",
    "partitioning": false,
    "clustering": null
   },
@@ -970,7 +970,7 @@
    "table": "concrete-list-461509-g8.gov_raw.order_items",
    "column": "shipped_at",
    "type": "TIMESTAMP",
-   "description": "",
+   "description": "Timestamp when the order item was shipped; null if not shipped.",
    "partitioning": false,
    "clustering": null
   },
@@ -978,7 +978,7 @@
    "table": "concrete-list-461509-g8.gov_raw.order_items",
    "column": "delivered_at",
    "type": "TIMESTAMP",
-   "description": "",
+   "description": "Timestamp when the order item was delivered; null if not delivered.",
    "partitioning": false,
    "clustering": null
   },
@@ -986,7 +986,7 @@
    "table": "concrete-list-461509-g8.gov_raw.order_items",
    "column": "returned_at",
    "type": "TIMESTAMP",
-   "description": "",
+   "description": "Timestamp when the order item was returned; null if not returned.",
    "partitioning": false,
    "clustering": null
   },
@@ -994,7 +994,7 @@
    "table": "concrete-list-461509-g8.gov_raw.order_items",
    "column": "sale_price",
    "type": "FLOAT64",
-   "description": "",
+   "description": "Price at which the item was sold.",
    "partitioning": false,
    "clustering": null
   },
@@ -1002,7 +1002,7 @@
    "table": "concrete-list-461509-g8.gov_raw.orders",
    "column": "order_id",
    "type": "INT64",
-   "description": "",
+   "description": "Order identifier; one row per order.",
    "partitioning": false,
    "clustering": null
   },
@@ -1010,7 +1010,7 @@
    "table": "concrete-list-461509-g8.gov_raw.orders",
    "column": "user_id",
    "type": "INT64",
-   "description": "",
+   "description": "Identifier of the customer who placed the order (gov_raw.users.id); not unique in this table.",
    "partitioning": false,
    "clustering": null
   },
@@ -1018,7 +1018,7 @@
    "table": "concrete-list-461509-g8.gov_raw.orders",
    "column": "status",
    "type": "STRING",
-   "description": "",
+   "description": "Fulfillment status of the order.",
    "partitioning": false,
    "clustering": null
   },
@@ -1026,7 +1026,7 @@
    "table": "concrete-list-461509-g8.gov_raw.orders",
    "column": "created_at",
    "type": "TIMESTAMP",
-   "description": "",
+   "description": "Timestamp when the order was created.",
    "partitioning": false,
    "clustering": null
   },
@@ -1034,7 +1034,7 @@
    "table": "concrete-list-461509-g8.gov_raw.orders",
    "column": "shipped_at",
    "type": "TIMESTAMP",
-   "description": "",
+   "description": "Timestamp when the order was shipped; null if not shipped.",
    "partitioning": false,
    "clustering": null
   },
@@ -1042,7 +1042,7 @@
    "table": "concrete-list-461509-g8.gov_raw.orders",
    "column": "delivered_at",
    "type": "TIMESTAMP",
-   "description": "",
+   "description": "Timestamp when the order was delivered; null if not delivered.",
    "partitioning": false,
    "clustering": null
   },
@@ -1050,7 +1050,7 @@
    "table": "concrete-list-461509-g8.gov_raw.orders",
    "column": "returned_at",
    "type": "TIMESTAMP",
-   "description": "",
+   "description": "Timestamp when the order was returned; null if not returned.",
    "partitioning": false,
    "clustering": null
   },
@@ -1058,7 +1058,7 @@
    "table": "concrete-list-461509-g8.gov_raw.orders",
    "column": "num_of_item",
    "type": "INT64",
-   "description": "",
+   "description": "Number of items in the order.",
    "partitioning": false,
    "clustering": null
   },
@@ -1066,7 +1066,7 @@
    "table": "concrete-list-461509-g8.gov_raw.products",
    "column": "id",
    "type": "INT64",
-   "description": "",
+   "description": "Product identifier; one row per product.",
    "partitioning": false,
    "clustering": null
   },
@@ -1074,7 +1074,7 @@
    "table": "concrete-list-461509-g8.gov_raw.products",
    "column": "cost",
    "type": "FLOAT64",
-   "description": "",
+   "description": "Unit cost of the product to the business.",
    "partitioning": false,
    "clustering": null
   },
@@ -1082,7 +1082,7 @@
    "table": "concrete-list-461509-g8.gov_raw.products",
    "column": "category",
    "type": "STRING",
-   "description": "",
+   "description": "Product category.",
    "partitioning": false,
    "clustering": null
   },
@@ -1090,7 +1090,7 @@
    "table": "concrete-list-461509-g8.gov_raw.products",
    "column": "name",
    "type": "STRING",
-   "description": "",
+   "description": "Product name.",
    "partitioning": false,
    "clustering": null
   },
@@ -1098,7 +1098,7 @@
    "table": "concrete-list-461509-g8.gov_raw.products",
    "column": "brand",
    "type": "STRING",
-   "description": "",
+   "description": "Product brand name.",
    "partitioning": false,
    "clustering": null
   },
@@ -1106,7 +1106,7 @@
    "table": "concrete-list-461509-g8.gov_raw.products",
    "column": "retail_price",
    "type": "FLOAT64",
-   "description": "",
+   "description": "List price of the product.",
    "partitioning": false,
    "clustering": null
   },
@@ -1114,7 +1114,7 @@
    "table": "concrete-list-461509-g8.gov_raw.products",
    "column": "department",
    "type": "STRING",
-   "description": "",
+   "description": "Product department.",
    "partitioning": false,
    "clustering": null
   },
@@ -1122,7 +1122,7 @@
    "table": "concrete-list-461509-g8.gov_raw.products",
    "column": "distribution_center_id",
    "type": "INT64",
-   "description": "",
+   "description": "Identifier of the distribution center that holds the product.",
    "partitioning": false,
    "clustering": null
   },
@@ -1130,7 +1130,7 @@
    "table": "concrete-list-461509-g8.gov_raw.users",
    "column": "id",
    "type": "INT64",
-   "description": "",
+   "description": "Customer identifier; one row per customer.",
    "partitioning": false,
    "clustering": null
   },
@@ -1138,7 +1138,7 @@
    "table": "concrete-list-461509-g8.gov_raw.users",
    "column": "age",
    "type": "INT64",
-   "description": "",
+   "description": "Age in years as recorded in the source data.",
    "partitioning": false,
    "clustering": null
   },
@@ -1146,7 +1146,7 @@
    "table": "concrete-list-461509-g8.gov_raw.users",
    "column": "gender",
    "type": "STRING",
-   "description": "",
+   "description": "Gender as recorded in the source data.",
    "partitioning": false,
    "clustering": null
   },
@@ -1154,7 +1154,7 @@
    "table": "concrete-list-461509-g8.gov_raw.users",
    "column": "state",
    "type": "STRING",
-   "description": "",
+   "description": "State or province of the customer.",
    "partitioning": false,
    "clustering": null
   },
@@ -1162,7 +1162,7 @@
    "table": "concrete-list-461509-g8.gov_raw.users",
    "column": "city",
    "type": "STRING",
-   "description": "",
+   "description": "City of the customer.",
    "partitioning": false,
    "clustering": null
   },
@@ -1170,7 +1170,7 @@
    "table": "concrete-list-461509-g8.gov_raw.users",
    "column": "country",
    "type": "STRING",
-   "description": "",
+   "description": "Country of the customer.",
    "partitioning": false,
    "clustering": null
   },
@@ -1178,7 +1178,7 @@
    "table": "concrete-list-461509-g8.gov_raw.users",
    "column": "traffic_source",
    "type": "STRING",
-   "description": "",
+   "description": "Channel through which the customer was acquired.",
    "partitioning": false,
    "clustering": null
   },
@@ -1186,7 +1186,7 @@
    "table": "concrete-list-461509-g8.gov_raw.users",
    "column": "created_at",
    "type": "TIMESTAMP",
-   "description": "",
+   "description": "Timestamp when the customer record was created.",
    "partitioning": false,
    "clustering": null
   },
@@ -1194,7 +1194,7 @@
    "table": "concrete-list-461509-g8.gov_staging.stg_order_items",
    "column": "order_item_id",
    "type": "INT64",
-   "description": "",
+   "description": "Order item identifier; one row per item.",
    "partitioning": false,
    "clustering": null
   },
@@ -1202,7 +1202,7 @@
    "table": "concrete-list-461509-g8.gov_staging.stg_order_items",
    "column": "order_id",
    "type": "INT64",
-   "description": "",
+   "description": "Identifier of the parent order.",
    "partitioning": false,
    "clustering": null
   },
@@ -1210,7 +1210,7 @@
    "table": "concrete-list-461509-g8.gov_staging.stg_order_items",
    "column": "user_id",
    "type": "INT64",
-   "description": "",
+   "description": "Identifier of the customer who placed the order.",
    "partitioning": false,
    "clustering": null
   },
@@ -1218,7 +1218,7 @@
    "table": "concrete-list-461509-g8.gov_staging.stg_order_items",
    "column": "order_date",
    "type": "DATE",
-   "description": "",
+   "description": "Date the order item was created.",
    "partitioning": false,
    "clustering": null
   },
@@ -1226,7 +1226,7 @@
    "table": "concrete-list-461509-g8.gov_staging.stg_order_items",
    "column": "status",
    "type": "STRING",
-   "description": "",
+   "description": "Fulfillment status of the item; cancelled items are excluded.",
    "partitioning": false,
    "clustering": null
   },
@@ -1234,7 +1234,7 @@
    "table": "concrete-list-461509-g8.gov_staging.stg_order_items",
    "column": "category",
    "type": "STRING",
-   "description": "",
+   "description": "Category of the ordered product.",
    "partitioning": false,
    "clustering": null
   },
@@ -1242,7 +1242,7 @@
    "table": "concrete-list-461509-g8.gov_staging.stg_order_items",
    "column": "department",
    "type": "STRING",
-   "description": "",
+   "description": "Department of the ordered product.",
    "partitioning": false,
    "clustering": null
   },
@@ -1250,7 +1250,7 @@
    "table": "concrete-list-461509-g8.gov_staging.stg_order_items",
    "column": "brand",
    "type": "STRING",
-   "description": "",
+   "description": "Brand of the ordered product.",
    "partitioning": false,
    "clustering": null
   },
@@ -1258,7 +1258,7 @@
    "table": "concrete-list-461509-g8.gov_staging.stg_order_items",
    "column": "sale_price",
    "type": "FLOAT64",
-   "description": "",
+   "description": "Price at which the item was sold.",
    "partitioning": false,
    "clustering": null
   },
@@ -1266,7 +1266,7 @@
    "table": "concrete-list-461509-g8.gov_staging.stg_order_items",
    "column": "cost",
    "type": "FLOAT64",
-   "description": "",
+   "description": "Unit cost of the ordered product.",
    "partitioning": false,
    "clustering": null
   }
@@ -1284,7 +1284,7 @@
    "table": "concrete-list-461509-g8.gov_mart.daily_sales",
    "check": "freshness_hours",
    "status": "pass",
-   "value": 0.38,
+   "value": 0.0,
    "threshold": "warn 26 / fail 50",
    "detail": ""
   },
@@ -1332,7 +1332,7 @@
    "table": "concrete-list-461509-g8.gov_mart.customer_ltv",
    "check": "freshness_hours",
    "status": "pass",
-   "value": 13.64,
+   "value": 0.01,
    "threshold": "warn 26 / fail 50",
    "detail": ""
   },

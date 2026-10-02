@@ -1,6 +1,6 @@
 # BigQuery governance report: `concrete-list-461509-g8`
 
-Collected 2026-10-02T04:37:35+00:00 · job window 30 days · location US · prices: $6.25/TiB on-demand (estimates from list price, not a billing export)
+Collected 2026-10-02T05:06:58+00:00 · job window 30 days · location US · prices: $6.25/TiB on-demand (estimates from list price, not a billing export)
 
 > **Warning:** 1 table(s) missing from TABLE_STORAGE (collection may be recent); filled from the Tables API without long-term split: gov_raw.users.
 
@@ -9,8 +9,8 @@ Collected 2026-10-02T04:37:35+00:00 · job window 30 days · location US · pric
 | Metric | Value |
 |---|---|
 | Tables / columns | 9 / 66 |
-| Column descriptions | 0.0% |
-| Table descriptions | 33.3% |
+| Column descriptions | 100.0% |
+| Table descriptions | 100.0% |
 | Storage | 0.048 GiB, $0.0010/month |
 | Query cost in window | $0.0025 over 45 jobs (3 cache hits) |
 | Data quality | 10 pass · 0 warn · 0 fail |
@@ -61,13 +61,13 @@ Addressable cost = query cost in the window that the change could reduce, or mon
 | Table | Check | Status | Value | Threshold |
 |---|---|---|---|---|
 | `concrete-list-461509-g8.gov_mart.daily_sales` | row_count | pass | 44312 | >= 100 |
-| `concrete-list-461509-g8.gov_mart.daily_sales` | freshness_hours | pass | 0.38 | warn 26 / fail 50 |
+| `concrete-list-461509-g8.gov_mart.daily_sales` | freshness_hours | pass | 0.0 | warn 26 / fail 50 |
 | `concrete-list-461509-g8.gov_mart.daily_sales` | row_change_pct | pass | 0.0 | warn 30 / fail 60 |
 | `concrete-list-461509-g8.gov_mart.daily_sales` | null_pct:order_date | pass | 0.0 | warn 0.1 / fail 1.0 |
 | `concrete-list-461509-g8.gov_mart.daily_sales` | null_pct:revenue | pass | 0.0 | warn 0.1 / fail 1.0 |
 | `concrete-list-461509-g8.gov_mart.daily_sales` | duplicate_keys | pass | 0 | = 0 |
 | `concrete-list-461509-g8.gov_mart.customer_ltv` | row_count | pass | 71973 | >= 0 |
-| `concrete-list-461509-g8.gov_mart.customer_ltv` | freshness_hours | pass | 13.64 | warn 26 / fail 50 |
+| `concrete-list-461509-g8.gov_mart.customer_ltv` | freshness_hours | pass | 0.01 | warn 26 / fail 50 |
 | `concrete-list-461509-g8.gov_mart.customer_ltv` | null_pct:user_id | pass | 0.0 | warn 0.0001 / fail 1.0 |
 | `concrete-list-461509-g8.gov_mart.customer_ltv` | duplicate_keys | pass | 0 | = 0 |
 
