@@ -16,7 +16,7 @@ DEFAULTS = {
     "finops": {"expensive_query_usd": 1.0, "partition_min_gib": 10.0, "cluster_min_gib": 1.0,
                "pipeline_label": "pipeline", "unused_days": 30},
     "dq": [],
-    "describe": {"provider": "none", "model": "", "ollama_url": "http://localhost:11434", "language": "en"},
+    "describe": {"provider": "none", "model": "", "ollama_url": "http://localhost:11434", "language": "en", "min_interval_seconds": 6},
     "publish": {"redact_users": True},
 }
 

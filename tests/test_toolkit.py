@@ -134,7 +134,8 @@ def test_describe_suggest_mask_and_review_gate(cfg, runner, snap, tmp_path):
         cols = [c.split(":")[0].strip() for c in prompt.split("Columns (name: type): ")[1].split("\n")[0].split(",")]
         return "Sure! " + json.dumps({"table": "Customer attributes", "columns": {c: f"Meaning of {c}" for c in cols}})
 
-    sug = describe.suggest(cfg, runner, snap, call=fake_llm)
+    sug, errors = describe.suggest(cfg, runner, snap, call=fake_llm, sleep=lambda s: None)
+    assert errors == {}
     users = sug[f"{P}.gov_raw.users"]
     assert users["table"] == "" and users["reviewed"] is False                     # deskripsi tabel yang ada tidak ditimpa
     assert set(users["columns"]) == {"id", "age", "gender", "state", "city", "country", "traffic_source", "created_at"}
@@ -215,3 +216,120 @@ def test_view_lineage_with_dataset_only_reference(cfg):
 def test_fingerprint_ignores_comments_and_semicolon():
     a = finops.fingerprint("CREATE OR REPLACE TABLE t AS SELECT 1; -- at [31:1]")
     assert a == finops.fingerprint("create or replace table t as select 1") == finops.fingerprint("/* x */ CREATE OR REPLACE TABLE t AS SELECT 1;")
+
+
+def test_gemini_client_kept_alive_during_request(monkeypatch):
+    """Client yang ditutup sebelum request selesai harus terdeteksi (perilaku google-genai 2.x)."""
+    import sys, types
+    state = {"open": 0, "closed": False}
+
+    class FakeModels:
+        def generate_content(self, model, contents, config=None):
+            assert not state["closed"], "request sent through a closed client"
+            return types.SimpleNamespace(text='{"table": "t", "columns": {}}')
+
+    class FakeClient:
+        def __init__(self): self.models = FakeModels()
+        def __enter__(self): state["open"] += 1; return self
+        def __exit__(self, *a): state["closed"] = True
+        def __del__(self): state["closed"] = True
+
+    fake = types.ModuleType("google.genai"); fake.Client = FakeClient
+    ftypes = types.ModuleType("google.genai.types")
+    ftypes.GenerateContentConfig = lambda **k: k; ftypes.AutomaticFunctionCallingConfig = lambda **k: k
+    fake.types = ftypes
+    import google
+    monkeypatch.setitem(sys.modules, "google.genai", fake); monkeypatch.setitem(sys.modules, "google.genai.types", ftypes)
+    monkeypatch.setattr(google, "genai", fake, raising=False)
+    out = describe._call({"provider": "gemini", "model": "m"}, "prompt")
+    assert "table" in out and state["open"] == 1 and state["closed"]               # dipakai di dalam `with`, lalu ditutup
+
+
+def test_describe_views_unsampled_and_failures_isolated(cfg, snap):
+    """Kasus nyata: tabledata.list menolak VIEW; satu tabel gagal tidak boleh membuang saran tabel lain."""
+    view_cols = [{"dataset": "gov_mart", "table": "v_top_categories", "column": c, "data_type": t, "is_nullable": "YES",
+                  "is_partitioning_column": "NO", "clustering_ordinal_position": None, "description": ""} for c, t in (("category", "STRING"), ("revenue", "FLOAT64"))]
+    s2 = {**snap, "columns": snap["columns"] + view_cols}
+
+    class Strict(FixtureRunner):
+        def sample_rows(self, ref, columns, n=5):
+            if ref.endswith("v_top_categories"):
+                raise RuntimeError("400 Cannot list a table of type VIEW.")
+            return super().sample_rows(ref, columns, n)
+
+    prompts = []
+
+    def llm(_c, prompt):
+        prompts.append(prompt)
+        if "customer_ltv" in prompt.split("Table: ")[1].split("\n")[0]:
+            raise RuntimeError("503 model overloaded")
+        return '{"table": "x", "columns": {}}'
+
+    sug, errors = describe.suggest(cfg, Strict(HERE / "fixtures"), s2, call=llm, sleep=lambda s: None)
+    assert f"{P}.gov_mart.v_top_categories" in sug                                  # view tetap didokumentasikan
+    assert any("(view)" in p and "none (view)" in p for p in prompts)
+    assert set(errors) == {f"{P}.gov_mart.customer_ltv"} and "503" in errors[f"{P}.gov_mart.customer_ltv"]
+    assert f"{P}.gov_raw.users" in sug                                              # tabel lain tidak hilang
+
+
+@pytest.mark.parametrize("model,ok", [("gemini-2.5-flash", True), ("gemini-3.8-flash", True), ("NAMA_MODEL_TANPA_models/", False),
+                                      ("models/gemini-2.5-flash", False), ("", False)])
+def test_describe_model_name_validation(model, ok):
+    if ok:
+        describe.check_config({"provider": "gemini", "model": model})
+    else:
+        with pytest.raises(ValueError):
+            describe.check_config({"provider": "gemini", "model": model})
+
+
+class RateLimited(Exception):
+    code = 429
+
+
+def test_rate_limit_retry_uses_server_delay():
+    slept, calls = [], {"n": 0}
+
+    def llm(_c, _p):
+        calls["n"] += 1
+        if calls["n"] < 3:
+            raise RateLimited("429 RESOURCE_EXHAUSTED. {'details': [{'retryDelay': '34s'}]}")
+        return "ok"
+    assert describe.call_with_retry({}, "p", llm, sleep=slept.append) == "ok"
+    assert slept == [34.0, 34.0]
+    with pytest.raises(RateLimited):                                                # menyerah setelah 3 percobaan
+        describe.call_with_retry({}, "p", lambda c, p: (_ for _ in ()).throw(RateLimited("429")), sleep=lambda s: None)
+    with pytest.raises(ValueError):                                                 # error lain tidak di-retry
+        describe.call_with_retry({}, "p", lambda c, p: (_ for _ in ()).throw(ValueError("bad")), sleep=slept.append)
+
+
+def test_rerun_only_asks_for_missing_tables_and_keeps_reviews(cfg, runner, snap):
+    asked = []
+
+    def llm(_c, prompt):
+        asked.append(prompt.split("Table: ")[1].split(" ")[0])
+        return '{"table": "new", "columns": {}}'
+    kept = {f"{P}.gov_raw.users": {"table": "", "columns": {"age": "Age in years"}, "reviewed": True}}
+    sug, errors = describe.suggest(cfg, runner, snap, call=llm, existing=kept, sleep=lambda s: None)
+    assert f"{P}.gov_raw.users" not in asked and sug[f"{P}.gov_raw.users"]["reviewed"] is True
+    assert len(asked) == len(sug) - 1 and not errors
+
+
+def test_requests_are_spaced(cfg, runner, snap):
+    waits = []
+    describe.suggest(cfg, runner, snap, call=lambda c, p: '{"table": "", "columns": {}}', sleep=waits.append)
+    assert waits and all(5 <= w <= 6 for w in waits)                               # jeda min_interval_seconds (bawaan 6 s)
+
+
+class Busy(Exception):
+    code = 503
+
+
+def test_server_busy_retried_with_backoff():
+    slept, n = [], {"i": 0}
+
+    def llm(_c, _p):
+        n["i"] += 1
+        if n["i"] < 3:
+            raise Busy("503 UNAVAILABLE. This model is currently experiencing high demand.")
+        return "ok"
+    assert describe.call_with_retry({}, "p", llm, sleep=slept.append) == "ok" and slept == [10.0, 20.0]

@@ -16,7 +16,9 @@ metadata (`INFORMATION_SCHEMA` and the Tables API) and a strict per-query byte l
 | **Data quality** | Freshness, row count, row-count change, null rate and duplicate keys, graded pass / warn / fail |
 | **AI descriptions** | LLM-suggested table and column descriptions, written to a file for human review before anything is applied |
 
-Sample output: [docs/sample-report.md](docs/sample-report.md) (generated from the synthetic test fixtures).
+**Live report from a real BigQuery project:** [dashboard](https://elsonsaputra03-dot.github.io/indo-realtime-monitor/bq-live.html) ·
+[Markdown](snapshots/REPORT.md) · [JSON](snapshots/latest.json). The format generated from test fixtures is in
+[docs/sample-report.md](docs/sample-report.md).
 
 ## How it works
 
@@ -32,6 +34,23 @@ flowchart LR
   L & F & DQ --> R[report.json + REPORT.md]
   API --> D[describe] --> Y[descriptions.yaml] -->|after review| API
 ```
+
+## What the real runs found
+
+The toolkit was built against fixtures first, then run against a real BigQuery sandbox project. Every item below was found on a real
+run, fixed, covered by a regression test, and is described where it applies in this README.
+
+| # | Found | Fix |
+|---|---|---|
+| 1 | Project Owner cannot read `INFORMATION_SCHEMA.TABLE_STORAGE` | Grant Metadata Viewer; otherwise fall back to the free Tables API |
+| 2 | `TABLE_STORAGE` collection must be enabled per project, and fills in over about a day | One-time `ALTER PROJECT`; missing tables filled from the Tables API |
+| 3 | Per-dataset metadata queries are billed a minimum each: 178 MB per run | Region-level views, one query per kind: 84–105 MB per run (the upper end when DQ profiling is not served from cache) |
+| 4 | Comparing bytes scanned with table size never flags unpartitioned scans, because storage is columnar | Partition rule based on date filters on unpartitioned tables |
+| 5 | View definitions reference `dataset.table` without the project, so view lineage was missing | Table references parsed after `FROM`/`JOIN` in 2- and 3-part form |
+| 6 | `google-genai` 2.x closes its client when the object is collected; a one-line call fails | Client kept in a `with` block |
+| 7 | `tabledata.list` refuses views; one failing table discarded every suggestion | Views described without samples; failures isolated per table |
+| 8 | Free-tier Gemini returned 429 (per-minute quota) and 503 (high demand) | Spacing between requests, retries with server-suggested delay, incremental reruns |
+| 9 | Review caught the model describing a view as "the government marketplace", reading the dataset prefix `gov_` (governance) as government | Nothing is applied without `reviewed: true`; 66 of 66 columns documented after review |
 
 ## Cost guards
 
@@ -61,7 +80,9 @@ filters by date; comparing bytes processed with the whole table size (the first 
 
 `bqgov describe` asks an LLM (Gemini or a local Ollama model) for table and column descriptions and writes them to `descriptions.yaml`.
 Nothing changes in BigQuery until a person sets `reviewed: true` and runs `bqgov describe --apply`. The model sees column names, types and
-at most five sample rows with emails and phone numbers masked; existing descriptions are never overwritten.
+at most five sample rows with emails and phone numbers masked; existing descriptions are never overwritten. (Found on the first real run:
+`google-genai` 2.x closes its HTTP client when the `Client` object is garbage-collected, so a one-line `genai.Client().models...` call
+fails; the toolkit keeps the client in a `with` block.)
 
 ## Quickstart
 

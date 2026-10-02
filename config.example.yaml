@@ -38,6 +38,7 @@ describe:
   model: gemini-2.5-flash         # ganti dengan model yang tersedia untuk akun Anda
   ollama_url: http://localhost:11434
   language: en
+  min_interval_seconds: 6         # jeda antar-request; kuota gratis membatasi request per menit (429 pada eksekusi nyata)
 
 publish:
   redact_users: true              # email di laporan diganti user-xxxxxx sebelum ditulis (aman untuk repo publik)

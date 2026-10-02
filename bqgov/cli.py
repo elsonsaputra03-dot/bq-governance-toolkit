@@ -32,6 +32,7 @@ def main(argv=None) -> int:
     sub.add_parser("run", help="collect + DQ + report (JSON + Markdown)")
     d = sub.add_parser("describe", help="saran deskripsi LLM ke YAML, atau --apply YAML yang sudah ditinjau")
     d.add_argument("--apply"); d.add_argument("--file", default="descriptions.yaml")
+    d.add_argument("--refresh", action="store_true", help="minta ulang saran untuk semua tabel (abaikan isi --file yang ada)")
     sub.add_parser("demo-sql", help="cetak SQL untuk membuat dataset demo dari bigquery-public-data")
     a = ap.parse_args(argv)
     logging.basicConfig(level=logging.INFO if a.verbose else logging.WARNING, format="%(levelname)s %(name)s: %(message)s")
@@ -75,9 +76,19 @@ def main(argv=None) -> int:
             from google.cloud import bigquery
             done = describe_mod.apply(a.apply, bigquery.Client(project=cfg.project, location=cfg.location))
             print(f"applied descriptions to {len(done)} tables"); return 0
-        sugg = describe_mod.suggest(cfg, runner, collect_mod.collect(cfg, runner))
+        try:
+            describe_mod.check_config(cfg.describe)
+        except ValueError as exc:
+            print(f"error: {exc}", file=sys.stderr); return 2
+        existing = {} if a.refresh else describe_mod.load_existing(a.file)
+        sugg, errors = describe_mod.suggest(cfg, runner, collect_mod.collect(cfg, runner), existing=existing)
         describe_mod.write(sugg, a.file)
-        print(f"wrote suggestions for {len(sugg)} tables to {a.file}; review, set reviewed: true, then --apply"); return 0
+        for ref, err in errors.items():
+            print(f"warning: no suggestion for {ref}: {err}", file=sys.stderr)
+        new = len(sugg) - len(existing)
+        print(f"wrote {len(sugg)} tables to {a.file}: {new} new, {len(existing)} kept from the previous file, {len(errors)} failed"
+              + ("; run again to retry the failed ones" if errors else "") + ". Review, set reviewed: true, then --apply")
+        return 4 if errors and not sugg else 0
     return 2
 
 
