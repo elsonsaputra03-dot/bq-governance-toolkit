@@ -6,7 +6,7 @@
   "storage_source": "information_schema+tables_api",
   "project": "concrete-list-461509-g8",
   "location": "US",
-  "collected_at": "2026-10-02T04:29:05+00:00",
+  "collected_at": "2026-10-02T04:37:35+00:00",
   "lookback_days": 30,
   "datasets": [
    "gov_raw",
@@ -18,8 +18,8 @@
    "active_storage_per_gib_month": 0.02,
    "long_term_storage_per_gib_month": 0.01
   },
-  "toolkit_jobs_in_window": 37,
-  "toolkit_bytes_in_window": 387973120,
+  "toolkit_jobs_in_window": 44,
+  "toolkit_bytes_in_window": 471859200,
   "toolkit_bytes_billed": 83886080
  },
  "summary": {
@@ -30,7 +30,7 @@
   "storage_gib": 0.048,
   "storage_usd_month": 0.001,
   "dq": {
-   "pass": 9,
+   "pass": 10,
    "warn": 0,
    "fail": 0
   }
@@ -361,7 +361,7 @@
    "cost_usd_month": 6.732037290930748e-05
   },
   {
-   "table": "concrete-list-461509-g8.gov_raw.legacy_product_snapshot",
+   "table": "concrete-list-461509-g8.gov_raw.products",
    "rows": 29120,
    "logical_bytes": 3295895,
    "active_gib": 0.0030695414170622826,
@@ -369,7 +369,7 @@
    "cost_usd_month": 6.139082834124565e-05
   },
   {
-   "table": "concrete-list-461509-g8.gov_raw.products",
+   "table": "concrete-list-461509-g8.gov_raw.legacy_product_snapshot",
    "rows": 29120,
    "logical_bytes": 3295895,
    "active_gib": 0.0030695414170622826,
@@ -553,7 +553,7 @@
    "column": "created_at",
    "detail": "`created_at` is filtered in 12 queries in 30 days, but the table is not partitioned, so each of them reads every row.",
    "addressable_usd": 0.000763,
-   "ddl": "CREATE TABLE `concrete-list-461509-g8.gov_raw.order_items_part` PARTITION BY DATE(created_at) AS SELECT * FROM `concrete-list-461509-g8.gov_raw.order_items`;  -- lalu ganti nama setelah validasi"
+   "ddl": "CREATE TABLE `concrete-list-461509-g8.gov_raw.order_items_part` PARTITION BY DATE(created_at) AS SELECT * FROM `concrete-list-461509-g8.gov_raw.order_items`;  -- validate, then swap names"
   },
   {
    "type": "cluster",
@@ -563,7 +563,7 @@
    ],
    "detail": "Frequently filtered: `status` (8x).",
    "addressable_usd": 0.000942,
-   "ddl": "CREATE TABLE `concrete-list-461509-g8.gov_raw.order_items_clustered` CLUSTER BY status AS SELECT * FROM `concrete-list-461509-g8.gov_raw.order_items`;  -- lalu ganti nama setelah validasi"
+   "ddl": "CREATE TABLE `concrete-list-461509-g8.gov_raw.order_items_clustered` CLUSTER BY status AS SELECT * FROM `concrete-list-461509-g8.gov_raw.order_items`;  -- validate, then swap names"
   },
   {
    "type": "select_star",
@@ -1284,9 +1284,17 @@
    "table": "concrete-list-461509-g8.gov_mart.daily_sales",
    "check": "freshness_hours",
    "status": "pass",
-   "value": 0.24,
+   "value": 0.38,
    "threshold": "warn 26 / fail 50",
    "detail": ""
+  },
+  {
+   "table": "concrete-list-461509-g8.gov_mart.daily_sales",
+   "check": "row_change_pct",
+   "status": "pass",
+   "value": 0.0,
+   "threshold": "warn 30 / fail 60",
+   "detail": "previous 44312"
   },
   {
    "table": "concrete-list-461509-g8.gov_mart.daily_sales",
@@ -1324,7 +1332,7 @@
    "table": "concrete-list-461509-g8.gov_mart.customer_ltv",
    "check": "freshness_hours",
    "status": "pass",
-   "value": 13.5,
+   "value": 13.64,
    "threshold": "warn 26 / fail 50",
    "detail": ""
   },

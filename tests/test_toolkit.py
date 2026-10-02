@@ -1,5 +1,6 @@
 """Test end-to-end dengan FixtureRunner: tanpa jaringan, tanpa akun GCP."""
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -12,6 +13,12 @@ from bqgov.bq import FixtureRunner
 HERE = Path(__file__).parent
 NOW = datetime(2026, 9, 30, 6, 0, tzinfo=timezone.utc)
 P = "demo-project"
+
+
+@pytest.fixture(autouse=True)
+def frozen_clock(monkeypatch):
+    """Cek freshness memakai jam fixture, bukan jam sungguhan (sebelumnya test gagal begitu fixture berumur > 2 hari)."""
+    monkeypatch.setenv("BQGOV_NOW", NOW.isoformat())
 
 
 @pytest.fixture(scope="module")

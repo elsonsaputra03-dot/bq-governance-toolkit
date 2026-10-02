@@ -4,7 +4,9 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import os
 import sys
+from datetime import datetime
 from pathlib import Path
 
 from . import collect as collect_mod, config, describe as describe_mod, dq as dq_mod, report as report_mod
@@ -52,7 +54,9 @@ def main(argv=None) -> int:
             return 3
         for w in snap["meta"]["warnings"]:
             print(f"warning: {w}", file=sys.stderr)
-        dq = dq_mod.run(cfg, runner, previous=_latest(out))
+        # BQGOV_NOW (ISO 8601) membekukan jam untuk cek freshness: test & fixture jadi deterministik
+        now = datetime.fromisoformat(os.environ["BQGOV_NOW"]) if os.environ.get("BQGOV_NOW") else None
+        dq = dq_mod.run(cfg, runner, previous=_latest(out), now=now)
         rep = report_mod.build(snap, dq, cfg.finops)
         rep["meta"]["toolkit_bytes_billed"] = runner.bytes_billed
         if cfg.publish.get("redact_users", True):

@@ -133,7 +133,7 @@ def recommendations(snapshot: dict, cfg_finops: dict) -> list[dict]:
                              "detail": f"`{col}` is filtered in {u['filters'][col]} queries in {meta['lookback_days']} days, but the table is not "
                                        f"partitioned, so each of them reads every row.",
                              "addressable_usd": round(u["filter_cost_usd"][col], 6),
-                             "ddl": f"CREATE TABLE `{t}_part` PARTITION BY {expr} AS SELECT * FROM `{t}`;  -- lalu ganti nama setelah validasi"})
+                             "ddl": f"CREATE TABLE `{t}_part` PARTITION BY {expr} AS SELECT * FROM `{t}`;  -- validate, then swap names"})
         if u and not clustered and gib >= cfg_finops["cluster_min_gib"]:
             cand = [f for f, n in u["filters"].items() if n >= 3 and (tc.get(f, {}).get("data_type") or "").split("<")[0] in CLUSTER_TYPES
                     and (tc.get(f, {}).get("data_type") or "") not in DATE_TYPES][:4]
@@ -141,7 +141,7 @@ def recommendations(snapshot: dict, cfg_finops: dict) -> list[dict]:
                 recs.append({"type": "cluster", "table": t, "columns": cand,
                              "detail": "Frequently filtered: " + ", ".join(f"`{c}` ({u['filters'][c]}x)" for c in cand) + ".",
                              "addressable_usd": round(u["cost_usd"], 6),
-                             "ddl": f"CREATE TABLE `{t}_clustered` CLUSTER BY {', '.join(cand)} AS SELECT * FROM `{t}`;  -- lalu ganti nama setelah validasi"})
+                             "ddl": f"CREATE TABLE `{t}_clustered` CLUSTER BY {', '.join(cand)} AS SELECT * FROM `{t}`;  -- validate, then swap names"})
         if u and u["select_star"] >= 3 and len(tc) >= 10:
             recs.append({"type": "select_star", "table": t, "detail": f"{u['select_star']} queries use SELECT * on a {len(tc)}-column table.",
                          "addressable_usd": round(u["select_star_cost_usd"], 6), "ddl": ""})
